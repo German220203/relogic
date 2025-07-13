@@ -34,7 +34,13 @@ public class BrandRestController {
     // Endpoint para crear una nueva marca
     @PostMapping
     public Brand createBrand(@RequestBody Brand brand) {
-        return brandService.saveBrand(brand);
+        return brandService.createBrand(brand);
+    }
+
+    // Endpoint para actualizar una marca existente
+    @PostMapping("/{id}")
+    public Brand updateBrand(@PathVariable Integer id, @RequestBody Brand brandDetails) {
+        return brandService.updateBrand(id, brandDetails);
     }
 
 }

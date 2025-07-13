@@ -1,48 +1,35 @@
-package es.relogic.relogic.brand;
+package es.relogic.relogic.device;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
-import es.relogic.relogic.model.Model;
 import es.relogic.relogic.models.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "brands")
+@Table(name = "device_types")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Brand extends BaseEntity{
+@AllArgsConstructor
+public class DeviceType extends BaseEntity{
 
     @Column(name = "name")
     @NotNull
-    @NotEmpty
     @NotBlank
     private String name;
-
-    @Column(name = "image")
-    private String image;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    //Relationships
-    
-    @OneToMany(mappedBy = "brand", orphanRemoval = true)
-    private Set<Model> models;
 
 }

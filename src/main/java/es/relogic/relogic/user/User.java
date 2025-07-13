@@ -1,33 +1,62 @@
 package es.relogic.relogic.user;
 
-import es.relogic.relogic.model.BaseEntity;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import es.relogic.relogic.models.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails{
 
     @Column(unique = true)
 	String username;
 
 	String password;
 
-	@NotNull
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "authority")
-	Authorities authority;
+    @Column(name = "first_name")
+    String firstName;
+
+    @Column(name = "last_name_1")
+    String lastName1;
+
+    @Column(name = "last_name_2")
+    String lastName2;
+
+    @Column(name = "email", unique = true)
+    String email;
+
+    @Column(name = "phone")
+    String phone;
+
+    @Enumerated(EnumType.STRING)
+    Authorities authority;
 
 	public Boolean hasAuthority(String auth) {
-		return authority.getAuthority().equals(auth);
+		return authority.equals(Authorities.valueOf(auth) );
 	}
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(authority.name()));
+    }
     
 }

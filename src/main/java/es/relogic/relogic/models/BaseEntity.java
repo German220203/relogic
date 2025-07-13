@@ -1,4 +1,4 @@
-package es.relogic.relogic.model;
+package es.relogic.relogic.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

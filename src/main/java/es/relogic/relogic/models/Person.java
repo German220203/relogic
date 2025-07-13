@@ -1,4 +1,4 @@
-package es.relogic.relogic.model;
+package es.relogic.relogic.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
