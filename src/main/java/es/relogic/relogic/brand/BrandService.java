@@ -1,7 +1,7 @@
 package es.relogic.relogic.brand;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +18,11 @@ public class BrandService {
     }
 
     @Transactional(readOnly = true)
-    public List<Brand> findAll() {
-        return (List<Brand>) brandRepository.findAll();
+    public List<BrandDTO> findAll() {
+        List<BrandDTO> allBrands = brandRepository.findAll().stream()
+            .map(brand -> new BrandDTO(brand))
+            .collect(Collectors.toList());
+        return allBrands;
     }
 
     @Transactional(readOnly = true)
@@ -44,8 +47,6 @@ public class BrandService {
 
     @Transactional
     public Brand createBrand(Brand brand) {
-        brand.setCreatedAt(LocalDateTime.now());
-        brand.setUpdatedAt(LocalDateTime.now());
         return brandRepository.save(brand);
     }
 
@@ -55,7 +56,6 @@ public class BrandService {
         if (brand != null) {
             brand.setName(brandDetails.getName());
             brand.setImage(brandDetails.getImage());
-            brand.setUpdatedAt(LocalDateTime.now());
             return brandRepository.save(brand);
         }
         return null;

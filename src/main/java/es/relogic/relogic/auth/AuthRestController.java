@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.relogic.relogic.jwt.request.LoginRequest;
-import es.relogic.relogic.jwt.request.RegisterRequest;
-import es.relogic.relogic.jwt.response.AuthResponse;
+import es.relogic.relogic.configuration.jwt.request.LoginRequest;
+import es.relogic.relogic.configuration.jwt.request.RegisterRequest;
+import es.relogic.relogic.configuration.jwt.response.AuthResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController

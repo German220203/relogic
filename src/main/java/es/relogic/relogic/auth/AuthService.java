@@ -7,10 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import es.relogic.relogic.jwt.JwtService;
-import es.relogic.relogic.jwt.request.LoginRequest;
-import es.relogic.relogic.jwt.request.RegisterRequest;
-import es.relogic.relogic.jwt.response.AuthResponse;
+import es.relogic.relogic.configuration.jwt.JwtService;
+import es.relogic.relogic.configuration.jwt.request.LoginRequest;
+import es.relogic.relogic.configuration.jwt.request.RegisterRequest;
+import es.relogic.relogic.configuration.jwt.response.AuthResponse;
 import es.relogic.relogic.user.Authorities;
 import es.relogic.relogic.user.User;
 import es.relogic.relogic.user.UserRepository;

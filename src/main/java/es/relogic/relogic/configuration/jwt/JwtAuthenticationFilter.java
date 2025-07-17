@@ -1,4 +1,4 @@
-package es.relogic.relogic.jwt;
+package es.relogic.relogic.configuration.jwt;
 
 import java.io.IOException;
 

@@ -16,7 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import es.relogic.relogic.jwt.JwtAuthenticationFilter;
+import es.relogic.relogic.configuration.jwt.JwtAuthenticationFilter;
 import es.relogic.relogic.user.Authorities;
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll() // Permitir el acceso a las rutas de autenticación
                 .requestMatchers("/api/v1/brands").hasAuthority(ADMIN) // Permitir el acceso a las rutas de marcas
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             .sessionManagement(sessionManager -> 

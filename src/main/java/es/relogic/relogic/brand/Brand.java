@@ -1,7 +1,10 @@
 package es.relogic.relogic.brand;
 
-import java.time.LocalDateTime;
 import java.util.Set;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 
 import es.relogic.relogic.model.Model;
 import es.relogic.relogic.models.BaseEntity;
@@ -25,7 +28,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Brand extends BaseEntity{
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     @NotNull
     @NotEmpty
     @NotBlank
@@ -34,15 +37,10 @@ public class Brand extends BaseEntity{
     @Column(name = "image")
     private String image;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
     //Relationships
     
     @OneToMany(mappedBy = "brand", orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Model> models;
 
 }

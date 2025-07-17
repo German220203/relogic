@@ -9,19 +9,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/v1/brands")
+@RequiredArgsConstructor
 public class BrandRestController {
 
     private final BrandService brandService;
 
-    public BrandRestController(BrandService brandService) {
-        this.brandService = brandService;
-    }
-
     // Endpoint para obtener todas las marcas
     @GetMapping
-    public List<Brand> getAllBrands() {
+    public List<BrandDTO> getAllBrands() {
         return brandService.findAll();
     }
 

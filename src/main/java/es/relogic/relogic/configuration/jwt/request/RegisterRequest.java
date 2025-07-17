@@ -1,4 +1,4 @@
-package es.relogic.relogic.jwt.request;
+package es.relogic.relogic.configuration.jwt.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

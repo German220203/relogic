@@ -1,5 +1,7 @@
 package es.relogic.relogic.user;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -42,5 +44,14 @@ public class UserService {
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setPhone(updatedUser.getPhone());
         return this.userRepository.save(existingUser);
-    }   
+    }
+
+    public User getUserByEmail(String email) {
+        return this.userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + email));
+    }
+
+    public List<User> getUsersByAuthority(String authorityName) {
+        return this.userRepository.findAllUserByAuthorityName(authorityName);
+    }
 }

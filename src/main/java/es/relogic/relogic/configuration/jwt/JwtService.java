@@ -1,4 +1,4 @@
-package es.relogic.relogic.jwt;
+package es.relogic.relogic.configuration.jwt;
 
 import java.security.Key;
 import java.util.Date;
@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,12 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
+    
+    @Value("${jwt.secret}")
+    private String SECRET;
 
-    private static final String SECRET = "0b6db10eb0f8f901612e75f1cbaa830adcccf759ff08951f";
+    @Value("${jwt.expiration}")
+    private Long EXPIRATION;
 
     public String getToken(UserDetails user) {
         return getToken(new HashMap<>(), user);
@@ -30,7 +35,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 120)) // 2 hours
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

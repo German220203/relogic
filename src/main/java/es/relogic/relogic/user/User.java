@@ -8,10 +8,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import es.relogic.relogic.models.BaseEntity;
+import es.relogic.relogic.order.Order;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,6 +52,9 @@ public class User extends BaseEntity implements UserDetails{
     @Enumerated(EnumType.STRING)
     Authorities authority;
 
+    @OneToMany(mappedBy = "user")
+    List<Order> orders;
+
 	public Boolean hasAuthority(String auth) {
 		return authority.equals(Authorities.valueOf(auth) );
 	}
@@ -58,5 +63,9 @@ public class User extends BaseEntity implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(authority.name()));
     }
+
+    // Relantionships
+
+
     
 }

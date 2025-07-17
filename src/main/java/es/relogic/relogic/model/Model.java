@@ -33,20 +33,15 @@ public class Model extends BaseEntity {
     @NotEmpty
     private String name;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
     // Relationships
 
     @ManyToOne
-    @JoinColumn(name = "brand", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "brand_id")
     private Brand brand;
 
     @ManyToOne
-    @JoinColumn(name = "device_type", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "device_type_id")
+    @NotNull
     private DeviceType deviceType;
 
 
