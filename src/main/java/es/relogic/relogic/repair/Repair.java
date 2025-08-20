@@ -2,6 +2,7 @@ package es.relogic.relogic.repair;
 
 import java.util.Set;
 
+import es.relogic.relogic.model.Model;
 import es.relogic.relogic.models.BaseEntity;
 import es.relogic.relogic.order.Order;
 import jakarta.persistence.Column;
@@ -34,5 +35,9 @@ public class Repair extends BaseEntity {
 
     @ManyToMany(mappedBy = "repairs")
     private Set<Order> orders;
+
+    @ManyToOne
+    @JoinColumn(name = "model_id")
+    private Model model;
 
 }

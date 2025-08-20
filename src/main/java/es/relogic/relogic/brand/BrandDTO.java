@@ -19,6 +19,8 @@ public class BrandDTO {
     private String name;
     private String image;
     private Set<ModelDTO> models;
+    private String createdAt;
+    private String updatedAt;
 
     public BrandDTO(Brand brand) {
         this.id = brand.getId();
@@ -29,5 +31,13 @@ public class BrandDTO {
                 .map(model -> new ModelDTO(model))
                 .collect(Collectors.toSet());
         }
+        if (brand.getCreatedAt() != null)
+            this.createdAt = brand.getCreatedAt().toString();
+        else
+            this.createdAt = "N/A";
+        if (brand.getUpdatedAt() != null)
+            this.updatedAt = brand.getUpdatedAt().toString();
+        else
+            this.updatedAt = "N/A";
     }
 }

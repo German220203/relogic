@@ -1,6 +1,7 @@
 package es.relogic.relogic.order;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +18,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
     List<Order> findByStatus(OrderStatus status);
 
     @Query("SELECT o FROM Order o WHERE o.trackId = :trackId")
-    Order findByTrackId(UUID trackId);
+    Optional<Order> findByTrackId(UUID trackId);
 
     @Query("SELECT o FROM Order o WHERE o.user.id = :userId AND o.status = :status")
     List<Order> findByUserIdAndStatus(Integer userId, OrderStatus status);

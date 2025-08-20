@@ -21,6 +21,8 @@ public interface RepairRepository extends JpaRepository<Repair, Integer> {
 
     @Query("SELECT rt FROM RepairType rt")
     List<RepairType> findAllRepairTypes();
-    
+
+    @Query("SELECT r FROM Repair r WHERE r.model.id = :modelId")
+    List<Repair> findByModelId(Integer modelId);
 
 }

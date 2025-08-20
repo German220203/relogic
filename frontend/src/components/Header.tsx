@@ -1,8 +1,8 @@
 "use client";
 
 import UsernameDisplay from "./UsernameDisplay";
-import LogoutButton from "./LogoutButton";
-import LoginForm from "./LoginForm";
+import LogoutButton from "./auth/LogoutButton";
+import LoginForm from "./auth/LoginForm";
 
 export default function Header() {
   const username = typeof window !== "undefined" ? localStorage.getItem("username") : null;

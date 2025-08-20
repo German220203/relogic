@@ -39,7 +39,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll() // Permitir el acceso a las rutas de autenticación
-                .requestMatchers("/api/v1/brands").hasAuthority(ADMIN) // Permitir el acceso a las rutas de marcas
+                .requestMatchers("/api/v1/brands").permitAll() // Permitir el acceso a las rutas de marcas
+                .requestMatchers("/api/v1/user/current").permitAll() // Permitir el acceso a las rutas de modelos
+                .requestMatchers("/api/v1/user").hasAuthority(ADMIN) // Permitir el acceso a las rutas de usuarios
                 .anyRequest().permitAll()
             )
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))

@@ -18,7 +18,7 @@ export default function LoginForm() {
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", response.data.username);
-      location.reload();
+      window.location.href = "/"; // Redirigir al inicio después del login exitoso
     } catch (err) {
       console.error("Login fallido", err);
       alert("Credenciales incorrectas");
@@ -41,7 +41,7 @@ export default function LoginForm() {
         onChange={(e) => setPassword(e.target.value)}
         className="border p-2 rounded"
       />
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded ">
         Entrar
       </button>
     </form>

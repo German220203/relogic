@@ -3,6 +3,7 @@ package es.relogic.relogic.order;
 import java.util.Set;
 import java.util.UUID;
 
+import es.relogic.relogic.deliveryinfo.DeliveryInfo;
 import es.relogic.relogic.models.BaseEntity;
 import es.relogic.relogic.repair.Repair;
 import es.relogic.relogic.user.User;
@@ -15,7 +16,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,13 +32,11 @@ public class Order extends BaseEntity {
 
     @Column(name = "order_number", unique = true)
     @NotNull
-    @NotBlank
     private UUID trackId;
 
-    @Column(name = "status")
     @NotNull
-    @NotBlank
-    @Enumerated(EnumType.STRING)
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "status")
     private OrderStatus status;
 
     // Relationships
@@ -54,6 +52,10 @@ public class Order extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "delivery_info_id")
+    private DeliveryInfo deliveryInfo;
 
     // Derivative methods
 

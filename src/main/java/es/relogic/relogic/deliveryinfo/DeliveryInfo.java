@@ -1,8 +1,12 @@
-package es.relogic.relogic.order;
+package es.relogic.relogic.deliveryinfo;
+
+import java.util.Set;
 
 import es.relogic.relogic.models.BaseEntity;
+import es.relogic.relogic.order.Order;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,12 +24,16 @@ public class DeliveryInfo extends BaseEntity {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "city", nullable = false)
-    private String city;
+    // @Column(name = "city")
+    // private String city;
 
-    @Column(name = "country", nullable = false)
-    private String country;
+    // @Column(name = "country")
+    // private String country;
 
-    @Column(name = "postal_code", nullable = false)
+    @Column(name = "postal_code")
     private String postalCode;
+
+    @OneToMany(mappedBy = "deliveryInfo")
+    private Set<Order> orders;
+
 }
