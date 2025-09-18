@@ -48,7 +48,7 @@ export default function AdminUsers() {
     const [showModal, setShowModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState<boolean | undefined>(undefined);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -132,8 +132,13 @@ export default function AdminUsers() {
         user.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (loading) {
-        return <div>Cargando...</div>;
+    // if (loading) {
+    //     return <div>Cargando...</div>;
+    // }
+
+    if (isAdmin === undefined) {
+        // Mientras se carga, no renderizamos nada (o mostramos un loader)
+        return null; // o <p>Cargando...</p>
     }
 
     if (!isAdmin) {

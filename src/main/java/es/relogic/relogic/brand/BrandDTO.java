@@ -21,11 +21,13 @@ public class BrandDTO {
     private Set<ModelDTO> models;
     private String createdAt;
     private String updatedAt;
+    private Boolean active;
 
     public BrandDTO(Brand brand) {
         this.id = brand.getId();
         this.name = brand.getName();
         this.image = brand.getImage();
+        this.active = brand.getActive();
         if (brand.getModels() != null) {
             this.models = brand.getModels().stream()
                 .map(model -> new ModelDTO(model))

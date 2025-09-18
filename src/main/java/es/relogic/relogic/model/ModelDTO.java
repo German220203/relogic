@@ -13,16 +13,18 @@ public class ModelDTO {
 
     private Integer id;
     private String name;
-    private Integer brandId;
-    private Integer deviceTypeId;
+    private String brand;
+    private String deviceType;
     private String createdAt;
     private String updatedAt;
+    private Boolean active;
 
     public ModelDTO(Model model) {
         this.id = model.getId();
         this.name = model.getName();
-        this.brandId = model.getBrand().getId();
-        this.deviceTypeId = model.getDeviceType().getId();
+        this.brand = model.getBrand().getName();
+        this.deviceType = model.getDeviceType().getName();
+        this.active = model.getActive();
         if (model.getCreatedAt() != null)
             this.createdAt = model.getCreatedAt().toString();
         else

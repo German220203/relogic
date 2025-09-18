@@ -1,6 +1,5 @@
 package es.relogic.relogic.model;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import es.relogic.relogic.brand.Brand;

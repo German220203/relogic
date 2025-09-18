@@ -29,6 +29,9 @@ public class BaseEntity {
     @Column(name = "updated_at")
     protected LocalDateTime updatedAt;
 
+	@Column(name = "active")
+	protected Boolean active;
+
 	public Integer getId() {
 		return id;
 	}
@@ -50,6 +53,14 @@ public class BaseEntity {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	@PrePersist

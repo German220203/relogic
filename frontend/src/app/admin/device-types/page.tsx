@@ -6,10 +6,9 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-class Brand {
+class DeviceType {
     id!: number;
     name!: string;
-    image!: string;
     models!: ModelDTO[];
     createdAt!: string;
     updatedAt!: string;
@@ -25,41 +24,49 @@ class ModelDTO {
     updatedAt!: string;
 }
 
-export default function AdminBrands() {
-    const [brands, setBrands] = useState<Brand[]>([]);
+class Brand {
+    id!: number;
+    name!: string;
+    image!: string;
+    models!: ModelDTO[];
+    createdAt!: string;
+    updatedAt!: string;
+    active!: boolean;
+}
+
+export default function AdminDeviceTypes() {
+    const [deviceTypes, setDeviceTypes] = useState<DeviceType[]>([]);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
     const [showModal, setShowModal] = useState(false);
-    const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
+    const [selectedBrand, setSelectedBrand] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isAdmin, setIsAdmin] = useState<boolean | undefined>(undefined);
+    const [brands, setBrands] = useState<Brand[]>([]); // para el modal de crear modelo
     // 👇 nuevo estado para filtro
     const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
-
-    // nuevo estado para formulario de creación
-    const [showCreateModelModal, setShowCreateModelModal] = useState(false);
+    const [selectedDeviceType, setSelectedDeviceType] = useState<DeviceType | null>(null);
     const [modelName, setModelName] = useState("");
-    const [deviceTypes, setDeviceTypes] = useState<DeviceType[]>([]);
-    const [selectedDeviceType, setSelectedDeviceType] = useState<number | null>(null);
+
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const router = useRouter();
 
     useEffect(() => {
-        const fetchBrands = async () => {
+        const fetchDeviceTypes = async () => {
             try {
-                const response = await api.get(`/api/v1/brands/admin?page=${page}&size=${size}`);
-                setBrands(response.data.content);
+                const response = await api.get(`/api/v1/device-types/admin?page=${page}&size=${size}`);
+                setDeviceTypes(response.data.content);
                 setTotalPages(response.data.totalPages);
-                console.log("Marcas:", response.data);
+                console.log("Tipos de Dispositivos:", response.data);
             } catch (error) {
-                console.error("Error fetching brands:", error);
+                console.error("Error fetching device types:", error);
             }
         };
 
-        fetchBrands();
+        fetchDeviceTypes();
     }, [page, size]);
 
     useEffect(() => {
@@ -76,17 +83,17 @@ export default function AdminBrands() {
         fetchUser();
     }, []);
 
-    // obtener deviceTypes
+    // obtener brands para el modal de crear modelo
     useEffect(() => {
-        async function fetchDeviceTypes() {
+        async function fetchBrands() {
             try {
-                const res = await api.get("/api/v1/device-types");
-                setDeviceTypes(res.data);
+                const res = await api.get("/api/v1/brands");
+                setBrands(res.data);
             } catch (e) {
-                console.error("Error cargando deviceTypes:", e);
+                console.error("Error cargando brands:", e);
             }
         }
-        fetchDeviceTypes();
+        fetchBrands();
     }, []);
 
     const handleCreateModel = async () => {
@@ -95,12 +102,12 @@ export default function AdminBrands() {
             return;
         }
         // ✅ Validación de duplicado en frontend
-        const nameExists = selectedBrand.models?.some(
+        const nameExists = selectedDeviceType.models?.some(
             (m) => m.name.trim().toLowerCase() === modelName.trim().toLowerCase()
         );
 
         if (nameExists) {
-            setErrorMessage(`Ya existe un modelo con el nombre "${modelName}" en la marca ${selectedBrand.name}.`);
+            setErrorMessage(`Ya existe un modelo con el nombre "${modelName}" en el tipo de dispositivo ${selectedDeviceType.name}.`);
             return;
         }
         try {
@@ -117,7 +124,7 @@ export default function AdminBrands() {
 
             if (res?.data.status) {
                 setSuccessMessage(res.data.message || "Guardado exitosamente");
-                setShowCreateModelModal(false);
+                // setShowCreateModelModal(false);
                 setModelName("");
                 setSelectedDeviceType(null);
                 router.refresh();
@@ -138,12 +145,12 @@ export default function AdminBrands() {
     };
 
     // 👇 aplicar filtro de búsqueda + filtro de estado
-    const filteredBrands = brands.filter((brand) => {
-        const matchesSearch = brand.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const filteredDeviceTypes = deviceTypes.filter((deviceType) => {
+        const matchesSearch = deviceType.name?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus =
             statusFilter === 'all' ||
-            (statusFilter === 'active' && brand.active) ||
-            (statusFilter === 'inactive' && !brand.active);
+            (statusFilter === 'active' && deviceType.active) ||
+            (statusFilter === 'inactive' && !deviceType.active);
         return matchesSearch && matchesStatus;
     });
 
@@ -205,7 +212,6 @@ export default function AdminBrands() {
                     <colgroup>
                         <col className="w-12" />   {/* ID */}
                         <col className="w-32" />   {/* Name */}
-                        <col className="w-28" />   {/* Image */}
                         <col className="w-48" />   {/* Models */}
                         <col className="w-28" />   {/* createdAt */}
                         <col className="w-60" />   {/* updatedAt */}
@@ -216,7 +222,6 @@ export default function AdminBrands() {
                         <tr>
                         <th className="px-3 py-1 text-left">ID</th>
                         <th className="px-3 py-1 text-left">Nombre</th>
-                        <th className="px-3 py-1 text-left">Imagen</th>
                         <th className="px-3 py-1 text-left">Modelos</th>
                         <th className="px-3 py-1 text-left">Fecha de Creación</th>
                         <th className="px-3 py-1 text-left">Fecha de Actualización</th>
@@ -232,7 +237,6 @@ export default function AdminBrands() {
                         <colgroup>
                         <col className="w-12" />
                         <col className="w-32" />
-                        <col className="w-28" />
                         <col className="w-48" />
                         <col className="w-28" />
                         <col className="w-60" />
@@ -240,20 +244,19 @@ export default function AdminBrands() {
                         <col className="w-20" />
                         </colgroup>
                         <tbody>
-                        {filteredBrands.map((brand: Brand) => (
-                            <tr key={brand.id}
-                            onClick={() => router.push(`/admin/brands/${brand.id}`)}
+                        {filteredDeviceTypes.map((deviceType: DeviceType) => (
+                            <tr key={deviceType.id}
+                            onClick={() => router.push(`/admin/device-types/${deviceType.id}`)}
                             className="cursor-pointer hover:bg-gray-100">
-                                <td className="px-3 py-1 text-sm">{brand.id}</td>
-                                <td className="px-3 py-1 text-sm">{brand.name}</td>
-                                <td className="px-3 py-1 text-sm">{brand.image}</td>
+                                <td className="px-3 py-1 text-sm">{deviceType.id}</td>
+                                <td className="px-3 py-1 text-sm">{deviceType.name}</td>
                                 <td className="px-3 py-1 text-sm">
-                                    {brand.models && brand.models.length > 0 ? (
+                                    {deviceType.models && deviceType.models.length > 0 ? (
                                         <button
                                             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mb-4"
                                             onClick={(e) => {
                                                 e.stopPropagation(); // evita que se dispare el click de la fila
-                                                setSelectedBrand(brand); // asigna la marca seleccionada
+                                                setSelectedDeviceType(deviceType); // asigna el tipo de dispositivo seleccionado
                                                 setShowModal(true);      // abre el modal
                                             }}
                                         >
@@ -263,8 +266,8 @@ export default function AdminBrands() {
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                setSelectedBrand(brand);
-                                                setShowCreateModelModal(true);
+                                                setSelectedDeviceType(deviceType);
+                                                // setShowCreateModelModal(true);
                                             }}
                                             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-4"
                                         >
@@ -272,24 +275,24 @@ export default function AdminBrands() {
                                         </button>
                                     )}
                                     </td>
-                                <td className="px-3 py-1 text-sm">{brand.createdAt}</td>
-                                <td className="px-3 py-1 text-sm">{brand.updatedAt}</td>
-                                <td className="px-3 py-1 text-sm">{brand.active ? "Sí" : "No"}</td>
+                                <td className="px-3 py-1 text-sm">{deviceType.createdAt}</td>
+                                <td className="px-3 py-1 text-sm">{deviceType.updatedAt}</td>
+                                <td className="px-3 py-1 text-sm">{deviceType.active ? "Sí" : "No"}</td>
                                 <td className="px-3 py-1 text-sm">
-                                    {brand.active ? (
+                                    {deviceType.active ? (
                                         // Botón para deshabilitar
                                         <button
                                             onClick={async (e) => {
                                             e.stopPropagation(); // evita que se dispare el click de la fila
-                                            if (confirm(`¿Estás seguro de deshabilitar la marca ${brand.name}?`)) {
+                                            if (confirm(`¿Estás seguro de deshabilitar el tipo de dispositivo ${deviceType.name}?`)) {
                                                 try {
-                                                await api.put(`/api/v1/brands/${brand.id}/disable`);
+                                                await api.put(`/api/v1/device-types/${deviceType.id}/disable`);
                                                 // en vez de quitarlo de la lista, lo actualizas a inactive
-                                                setBrands(brands.map(b => 
-                                                    b.id === brand.id ? { ...b, active: false } : b
+                                                setDeviceTypes(deviceTypes.map(dt => 
+                                                    dt.id === deviceType.id ? { ...dt, active: false } : dt
                                                 ));
                                                 } catch (error) {
-                                                console.error("Error deshabilitando la marca:", error);
+                                                console.error("Error deshabilitando el tipo de dispositivo:", error);
                                                 }
                                             }
                                             }}
@@ -302,14 +305,14 @@ export default function AdminBrands() {
                                         <button
                                             onClick={async (e) => {
                                             e.stopPropagation();
-                                            if (confirm(`¿Estás seguro de habilitar la marca ${brand.name}?`)) {
+                                            if (confirm(`¿Estás seguro de habilitar el tipo de dispositivo ${deviceType.name}?`)) {
                                                 try {
-                                                await api.put(`/api/v1/brands/${brand.id}/enable`);
-                                                setBrands(brands.map(b => 
-                                                    b.id === brand.id ? { ...b, active: true } : b
+                                                await api.put(`/api/v1/device-types/${deviceType.id}/enable`);
+                                                setDeviceTypes(deviceTypes.map(dt => 
+                                                    dt.id === deviceType.id ? { ...dt, active: true } : dt
                                                 ));
                                                 } catch (error) {
-                                                console.error("Error habilitando la marca:", error);
+                                                console.error("Error habilitando el tipo de dispositivo:", error);
                                                 }
                                             }
                                             }}
@@ -362,7 +365,7 @@ export default function AdminBrands() {
                     Crear marca
                 </Link>
             </div>
-            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+            {/* <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                 <h2 className="text-xl font-bold mb-4">
                     Modelos de {selectedBrand?.name ?? 'N/A'}
                 </h2>
@@ -397,10 +400,10 @@ export default function AdminBrands() {
                 >
                     Crear modelo
                 </button>
-                </Modal>
+                </Modal> */}
 
             {/* modal de crear modelo */}
-            <Modal isOpen={showCreateModelModal} onClose={() => setShowCreateModelModal(false)}>
+            {/* <Modal isOpen={showCreateModelModal} onClose={() => setShowCreateModelModal(false)}>
                 <h2 className="text-xl font-bold mb-4">
                     Crear modelo para {selectedBrand?.name}
                 </h2>
@@ -454,7 +457,7 @@ export default function AdminBrands() {
                         </button>
                     </div>
                 </div>
-            </Modal>
+            </Modal> */}
 
 
         </div>

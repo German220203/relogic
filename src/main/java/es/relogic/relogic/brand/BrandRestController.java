@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,6 +77,26 @@ public class BrandRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBrand(@PathVariable Integer id) {
         brandService.deleteBrand(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Endpoints para la gestión de marcas (ADMIN)
+
+    // Endpoint para obtener todas las marcas (ADMIN)
+    @GetMapping("/admin")
+    public BrandPageResponse getAllBrandsAdmin(Pageable pageable) {
+        return brandService.findAllAdmin(pageable);
+    }
+
+    @PutMapping("/{id}/enable")
+    public ResponseEntity<Void> enableBrand(@PathVariable Integer id) {
+        brandService.enableBrand(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableBrand(@PathVariable Integer id) {
+        brandService.disableBrand(id);
         return ResponseEntity.noContent().build();
     }
 

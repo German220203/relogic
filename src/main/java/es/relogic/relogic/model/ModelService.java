@@ -1,9 +1,20 @@
 package es.relogic.relogic.model;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import es.relogic.relogic.brand.Brand;
+import es.relogic.relogic.brand.BrandRepository;
+import es.relogic.relogic.device.DeviceType;
+import es.relogic.relogic.device.DeviceTypeRepository;
+import es.relogic.relogic.model.request.ModelCreateRequest;
+import es.relogic.relogic.model.response.ModelPageResponse;
+import es.relogic.relogic.model.response.ModelResponse;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -11,9 +22,80 @@ import lombok.RequiredArgsConstructor;
 public class ModelService {
 
     private final ModelRepository modelRepository;
+    private final BrandRepository brandRepository;
+    private final DeviceTypeRepository deviceTypeRepository;
 
-    public Model createModel(Model model) {
-        return modelRepository.save(model);
+    @Transactional(readOnly = true)
+    public ModelPageResponse findAllAdmin(Pageable pageable) {
+        Page<ModelDTO> modelsPage = modelRepository.findAll(pageable).map(m -> new ModelDTO(m));
+        return new ModelPageResponse(
+            modelsPage.getTotalElements(),
+            modelsPage.getTotalPages(),
+            modelsPage.getContent()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public ModelPageResponse findAll(Pageable pageable) {
+        Page<ModelDTO> modelsPage = modelRepository.findByActiveTrue(pageable).map(m -> new ModelDTO(m));
+        return new ModelPageResponse(
+            modelsPage.getTotalElements(),
+            modelsPage.getTotalPages(),
+            modelsPage.getContent()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public ModelDTO findByName(String name) {
+        Model model = modelRepository.findByName(name).get();
+        return new ModelDTO(model);
+    }
+
+    @Transactional(readOnly = true)
+    public ModelDTO findById(Integer id) {
+        return modelRepository.findById(id).map(ModelDTO::new).orElse(null);
+    }
+
+    @Transactional
+    public ModelResponse createModel(ModelCreateRequest model) {
+        if (model.getName() != null) {
+            Optional<Model> existingModel = modelRepository.findByName(model.getName());
+            if (existingModel.isPresent()) {
+                return new ModelResponse(false, existingModel.get(), "El modelo ya existe");
+            }
+        }
+
+        Model savedModel = new Model();
+        savedModel.setName(model.getName());
+        Brand brand = brandRepository.findById(model.getBrand()).orElse(null);
+        savedModel.setBrand(brand);
+        DeviceType deviceType = deviceTypeRepository.findById(model.getDeviceType()).orElse(null);
+        savedModel.setDeviceType(deviceType);
+        savedModel.setActive(true);
+        savedModel.setRepairs(List.of());
+        modelRepository.save(savedModel);
+        return new ModelResponse(true, savedModel, "Modelo creado exitosamente");
+    }
+
+    @Transactional
+    public ModelResponse updateModel(Integer id, Model model) {
+        if (model.getId() != null || id != null || id != model.getId()) {
+            Optional<Model> existingModel = modelRepository.findById(id);
+            if (existingModel.isPresent()) {
+                existingModel.get().setName(model.getName());
+                existingModel.get().setBrand(model.getBrand());
+                existingModel.get().setDeviceType(model.getDeviceType());
+                existingModel.get().setRepairs(model.getRepairs());
+                modelRepository.save(existingModel.get());
+                return new ModelResponse(true, existingModel.get(), "Modelo actualizado exitosamente");
+            }
+            else {
+                return new ModelResponse(Boolean.FALSE, (Model) null, "El modelo no existe");
+            }
+        }
+        else {
+            return new ModelResponse(Boolean.FALSE, (Model) null, "ID de modelo no proporcionado");
+        }
     }
 
     public Model getModelById(Integer id) {
@@ -25,12 +107,30 @@ public class ModelService {
         return modelRepository.findAll();
     }
 
+    @Transactional
+    public void enableModel(Integer id) {
+        Model model = modelRepository.findById(id).orElse(null);
+        if (model != null) {
+            model.setActive(true);
+            modelRepository.save(model);
+        }
+    }
+
+    @Transactional
+    public void disableModel(Integer id) {
+        Model model = modelRepository.findById(id).orElse(null);
+        if (model != null) {
+            model.setActive(false);
+            modelRepository.save(model);
+        }
+    }
+
     public void deleteModel(Integer id) {
         modelRepository.deleteById(id);
     }
 
     public List<Model> getModelsByBrandId(Integer brandId) {
-        return modelRepository.findAllByBrandId(brandId);
+        return modelRepository.findAllActiveByBrandId(brandId);
     }
 
     public List<Model> getModelsByDeviceTypeId(Integer deviceTypeId) {
@@ -38,7 +138,7 @@ public class ModelService {
     }
 
     public List<ModelDTO> getModelsByBrandAndDeviceType(Integer brandId, Integer deviceTypeId) {
-        return modelRepository.findAllByBrandIdAndDeviceTypeId(brandId, deviceTypeId).stream().map(model -> new ModelDTO(model)).toList();
+        return modelRepository.findAllActiveByBrandIdAndDeviceTypeId(brandId, deviceTypeId).stream().map(model -> new ModelDTO(model)).toList();
     }
 
 }

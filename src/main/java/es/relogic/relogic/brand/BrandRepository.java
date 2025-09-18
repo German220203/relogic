@@ -1,5 +1,6 @@
 package es.relogic.relogic.brand;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,4 +15,8 @@ public interface BrandRepository extends JpaRepository<Brand, Integer>{
     Optional<Brand> findByName(String name);
 
     Page<Brand> findAll(Pageable pageable);
+
+    Page<Brand> findByActiveTrue(Pageable pageable);
+
+    List<Brand> findByActiveTrue();
 }

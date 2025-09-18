@@ -34,8 +34,18 @@ public class BrandService {
     }
 
     @Transactional(readOnly = true)
-    public BrandPageResponse findAll(Pageable pageable) {
+    public BrandPageResponse findAllAdmin(Pageable pageable) {
         Page<BrandDTO> brandsPage = brandRepository.findAll(pageable).map(b -> new BrandDTO(b));
+        return new BrandPageResponse(
+            brandsPage.getTotalElements(),
+            brandsPage.getTotalPages(),
+            brandsPage.getContent()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public BrandPageResponse findAll(Pageable pageable) {
+        Page<BrandDTO> brandsPage = brandRepository.findByActiveTrue(pageable).map(b -> new BrandDTO(b));
         return new BrandPageResponse(
             brandsPage.getTotalElements(),
             brandsPage.getTotalPages(),
@@ -60,8 +70,30 @@ public class BrandService {
     }
 
     @Transactional
+    public void enableBrand(Integer id) {
+        Brand brand = brandRepository.findById(id).orElse(null);
+        if (brand != null) {
+            brand.setActive(true);
+            brandRepository.save(brand);
+        }
+    }
+
+    @Transactional
+    public void disableBrand(Integer id) {
+        Brand brand = brandRepository.findById(id).orElse(null);
+        if (brand != null) {
+            brand.setActive(false);
+            brandRepository.save(brand);
+        }
+    }
+
+    @Transactional
     public void deleteBrand(Integer id) {
-        brandRepository.deleteById(id);
+        Brand brand = brandRepository.findById(id).orElse(null);
+        if (brand != null) {
+            brand.setActive(false);
+            brandRepository.save(brand);
+        }
     }
 
     @Transactional
@@ -97,7 +129,7 @@ public class BrandService {
     }
 
     public List<BrandDTO> findByDeviceType(Integer deviceTypeId) {
-        List<Brand> brands = brandRepository.findAll();
+        List<Brand> brands = brandRepository.findByActiveTrue();
         List<BrandDTO> result = new ArrayList<BrandDTO>();
         for (Brand brand : brands) {
             for (Model model : brand.getModels()) {
