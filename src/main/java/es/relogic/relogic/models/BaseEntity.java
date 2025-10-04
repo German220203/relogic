@@ -1,6 +1,7 @@
 package es.relogic.relogic.models;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -40,12 +41,20 @@ public class BaseEntity {
 		this.id = id;
 	}
 
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
+	public String getCreatedAt() {
+		if (createdAt == null) return null;
+
+		// Crear un formatter más legible
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		return createdAt.format(formatter);
 	}
 
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
+	public String getUpdatedAt() {
+		if (updatedAt == null) return null;
+
+		// Crear un formatter más legible
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		return updatedAt.format(formatter);
 	}
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;

@@ -32,17 +32,6 @@ public class UserRestController {
         if(authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No autenticado");
         }
-
-        // UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        // // Asumiendo que UserDetails tiene getAuthorities
-        // boolean isAdmin = userDetails.getAuthorities().stream()
-        //                     .anyMatch(a -> a.getAuthority().equals("ADMIN"));
-
-        // return ResponseEntity.ok(Map.of(
-        //     "username", userDetails.getUsername(),
-        //     "isAdmin", isAdmin
-        // ));
-
         return ResponseEntity.ok(userService.getCurrentUserAuth());
     }
 

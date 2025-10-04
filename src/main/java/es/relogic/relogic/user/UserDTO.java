@@ -14,8 +14,7 @@ public class UserDTO {
     private Integer id;
     private String username;
     private String firstName;
-    private String lastName1;
-    private String lastName2;
+    private String lastName;
     private String email;
     private String phone;
     private Authorities authority;
@@ -24,8 +23,7 @@ public class UserDTO {
         this.id = user.getId();
         this.username = user.getUsername();
         this.firstName = user.getFirstName();
-        this.lastName1 = user.getLastName1();
-        this.lastName2 = user.getLastName2();
+        this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.phone = user.getPhone();
         this.authority = user.getAuthority();

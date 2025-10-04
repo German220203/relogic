@@ -9,6 +9,8 @@ import { z } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { addDays } from 'date-fns'
+import Image from 'next/image';
+import NavButtons from '@/components/NavButtons'
 
 type Props = {
   nextStep: () => void
@@ -27,6 +29,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export default function Step6Date({ nextStep, prevStep, formData, updateForm }: Props) {
+  
   const {
     control,
     handleSubmit,
@@ -68,21 +71,10 @@ export default function Step6Date({ nextStep, prevStep, formData, updateForm }: 
 
         {errors.date && <p className="text-red-500 mt-2">{errors.date.message}</p>}
 
-        <div className="flex items-center justify-center mt-4 w-full">
-          <button
-            type="button"
-            onClick={() => prevStep()}
-            className="px-6 py-2 bg-red-500 text-white rounded-full text-sm mr-2 transition-colors duration-300 hover:bg-white hover:text-red-500 border border-red-500"
-          >
-            Volver
-          </button>
-          <button
-            type="submit"
-            className="px-6 py-2 bg-blue-500 text-white rounded-full text-sm ml-2 transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500"
-          >
-            Continuar
-          </button>
-        </div>
+        <NavButtons 
+          onPrev={prevStep} 
+          onNext={handleSubmit(onSubmit)}
+        />
       </form>
 
       <style jsx global>{`
@@ -106,7 +98,7 @@ export default function Step6Date({ nextStep, prevStep, formData, updateForm }: 
 
         /* Título del mes */
         .custom-datepicker .react-datepicker__current-month {
-          color: #2563eb; /* azul-500 */
+          color: #009966; /* azul-500 */
           font-weight: 600;
           font-size: 1.25rem;
           margin-bottom: 0.5rem;
@@ -117,12 +109,12 @@ export default function Step6Date({ nextStep, prevStep, formData, updateForm }: 
         .custom-datepicker .react-datepicker__navigation--previous {
           top: 1.25rem;
           left: 1rem;
-          border-right-color: #3b82f6; /* azul-400 */
+          border-right-color: #009966; /* azul-400 */
         }
         .custom-datepicker .react-datepicker__navigation--next {
           top: 1.25rem;
           right: 1rem;
-          border-left-color: #3b82f6; /* azul-400 */
+          border-left-color: #009966; /* azul-400 */
         }
 
         /* Ajustamos tamaño y posición para que no se superpongan */
@@ -148,14 +140,14 @@ export default function Step6Date({ nextStep, prevStep, formData, updateForm }: 
         /* Días seleccionados */
         .custom-datepicker .react-datepicker__day--selected,
         .custom-datepicker .react-datepicker__day--keyboard-selected {
-          background-color: #3b82f6; /* azul-400 */
+          background-color: #009966; /* azul-400 */
           color: white;
         }
 
         /* Hover sobre días */
         .custom-datepicker .react-datepicker__day:hover {
-          background-color: #bfdbfe; /* azul-200 */
-          color: #1e40af; /* azul-900 */
+          background-color: #c7f9dcff; /* azul-200 */
+          color: rgba(0, 0, 0, 1)/* azul-900 */
         }
 
         /* Días fuera de mes */

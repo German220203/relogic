@@ -36,11 +36,13 @@ body {
 .children-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 64px); /* Ajusta según la altura de tu navbar */
-  min-width: calc(100vw - 32px); /* Ajusta según el padding deseado */
-  padding: 5%; /* Espacio alrededor del contenido */
-  box-sizing: border-box; /* Asegura que el padding no afecte al tamaño total */
-  /* border: 1px solid #4CAF50; */
+  align-items: stretch;          /* Ocupar todo el ancho */
+  justify-content: flex-start;   /* Empezar debajo del navbar */
+  min-height: calc(100vh - 64px); 
+  width: 100%; 
+  padding: 0 1rem;               /* 👈 margen lateral fijo (16px aprox.) */
+  margin-top: 10%;              /* 👈 deja espacio debajo del navbar */
+  box-sizing: border-box;
 }
+
+

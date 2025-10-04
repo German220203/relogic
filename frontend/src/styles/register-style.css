@@ -1,0 +1,107 @@
+/* Fondo general del registro */
+.register-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 64px); /* ocupa toda la pantalla sin pisar navbar */
+    background: url("/fondo-completo.jpg") no-repeat center/cover;
+    padding: 1rem;
+    margin-top: -5%; /* sube un poco para acercarse al navbar */
+    border-radius: 20px; /* bordes redondeados del contenedor */
+    box-sizing: border-box;
+}
+
+/* Tarjeta de registro */
+.register-div {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Formulario */
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Contenedor de input animado */
+.input-box {
+    position: relative;
+}
+
+.input-box .input {
+    font-size: 16px;
+    outline: none;
+    padding: 10px 15px;
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 7px;
+    border: 2px solid #999;
+    background: transparent;
+    transition: border-color 0.2s ease;
+}
+
+.input-box .input:focus,
+.input-box .input:not(:placeholder-shown) {
+    border-color: #5f8c5e;
+}
+
+
+/* Label animado */
+.input-box .label {
+    color: #999;
+    font-size: 16px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 15px;
+    top: 12px;
+    display: flex;
+}
+
+.input-box .char {
+    transition: 0.2s ease all;
+    transition-delay: calc(var(--index) * 0.05s);
+}
+
+.input-box .input:focus ~ .label .char,
+.input-box .input:not(:placeholder-shown) ~ .label .char {
+    transform: translateY(-20px);
+    font-size: 14px;
+    color: #5f8c5e;
+    background: #fff;
+    padding: 0 2px;
+    border-radius: 4px;
+}
+
+/* Botón */
+button[type="submit"] {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background-color: #5f8c5e;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 1px solid #5f8c5e;
+}
+
+button[type="submit"]:hover {
+    background-color: white;
+    color: #5f8c5e;
+}
+
+/* Texto inferior */
+.register-form a {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.register-form a:hover {
+    text-decoration: underline;
+}

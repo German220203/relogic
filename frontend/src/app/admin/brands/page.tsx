@@ -107,9 +107,9 @@ export default function AdminBrands() {
             let res;
             res = await api.post(
                 "/api/v1/models",
-                { 
+                {
                 name: modelName,
-                brand: selectedBrand.id, 
+                brand: selectedBrand.id,
                 deviceType: selectedDeviceType
                 },
                 { withCredentials: true }
@@ -270,7 +270,7 @@ export default function AdminBrands() {
                                         >
                                             Crear modelo
                                         </button>
-                                    )}
+                                        )}
                                     </td>
                                 <td className="px-3 py-1 text-sm">{brand.createdAt}</td>
                                 <td className="px-3 py-1 text-sm">{brand.updatedAt}</td>

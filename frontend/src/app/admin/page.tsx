@@ -19,6 +19,9 @@ export default function AdminPage() {
                 console.log("User is admin:", response.data.isAdmin);
             } catch (error) {
                 console.error("Error fetching user data:", error);
+                if (error.response.data === "No autenticado" && error.response.status === 401) {
+                    window.location.href = "/login";
+                }
             }
             setLoading(false);
         };
@@ -36,13 +39,13 @@ export default function AdminPage() {
         <div className="admin-page">
             <h1 className="text-2xl font-bold mb-4">Panel de Administración</h1>
             <div className="admin-buttons grid grid-cols-3 md:grid-cols-3 gap-4">
-                <Link href="/admin/users" className="bg-blue-500 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500">Gestionar Usuarios</Link>
-                <Link href="/admin/orders" className="bg-blue-500 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500">Gestionar Pedidos</Link>
-                <Link href="/admin/brands" className="bg-blue-500 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500">Gestionar Marcas</Link>
-                <Link href="/admin/models" className="bg-blue-500 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500">Gestionar Modelos</Link>
-                <Link href="/admin/device-types" className="bg-blue-500 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500">Gestionar Tipos de Dispositivos</Link>
-                <Link href="/admin/repairs" className="bg-blue-500 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500">Gestionar Reparaciones</Link>
-                <Link href="/admin/repair-types" className="bg-blue-500 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500">Gestionar Tipos de Reparación</Link>
+                <Link href="/admin/users" className="bg-emerald-600 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-emerald-600 border border-emerald-600">Gestionar Usuarios</Link>
+                <Link href="/admin/orders" className="bg-emerald-600 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-emerald-600 border border-emerald-600">Gestionar Pedidos</Link>
+                <Link href="/admin/brands" className="bg-emerald-600 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-emerald-600 border border-emerald-600">Gestionar Marcas</Link>
+                <Link href="/admin/models" className="bg-emerald-600 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-emerald-600 border border-emerald-600">Gestionar Modelos</Link>
+                <Link href="/admin/device-types" className="bg-emerald-600 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-emerald-600 border border-emerald-600">Gestionar Tipos de Dispositivos</Link>
+                <Link href="/admin/repairs" className="bg-emerald-600 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-emerald-600 border border-emerald-600">Gestionar Reparaciones</Link>
+                <Link href="/admin/repair-types" className="bg-emerald-600 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-emerald-600 border border-emerald-600">Gestionar Tipos de Reparación</Link>
                 {/* Agrega más enlaces o componentes según sea necesario */}
             </div>
         </div>

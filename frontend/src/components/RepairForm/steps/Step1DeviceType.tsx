@@ -22,25 +22,31 @@ export default function Step1DeviceType({ nextStep, formData, updateForm }: Prop
       </h2>
 
       <div className="grid gap-3 max-w-4xl justify-center grid-cols-3">
-        {types.map(t => (
-          <button
-            key={t.id}
-            onClick={() => {
-              updateForm({ deviceTypeId: t.id, deviceTypeName: t.name })
-              console.log('Actualizado a:', { deviceTypeId: t.id, deviceTypeName: t.name })
-              nextStep()
-            }}
-            className={`
-              p-4 rounded-xl border text-center font-medium transition-all duration-200
-              ${formData.deviceTypeId === t.id
-                ? 'bg-blue-500 text-white border-blue-700'
-                : 'bg-white text-gray-800 border-gray-300 hover:bg-blue-100'}
-              hover:scale-105 active:scale-95 hover:shadow-lg
-            `}
-          >
-            {t.name}
-          </button>
-        ))}
+        {
+          types.length === 0 ? (
+            <p>No hay dispositivos disponibles</p>
+          ) : (
+            types.map(t => (
+              <button
+                key={t.id}
+                onClick={() => {
+                  updateForm({ deviceTypeId: t.id, deviceTypeName: t.name })
+                  console.log('Actualizado a:', { deviceTypeId: t.id, deviceTypeName: t.name })
+                  nextStep()
+                }}
+                className={`
+                  p-4 rounded-xl border text-center font-medium transition-all duration-200
+                  ${formData.deviceTypeId === t.id
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-white text-gray-800 border-gray-300 hover:bg-emerald-50'}
+                  hover:scale-105 active:scale-95 hover:shadow-lg
+                `}
+              >
+                {t.name}
+              </button>
+            ))
+          )
+        }
       </div>
     </div>
   )

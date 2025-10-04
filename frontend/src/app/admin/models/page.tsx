@@ -5,6 +5,7 @@ import api from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Modal from "@/components/Modal";
 
 class ModelDTO {
     id!: number;
@@ -23,7 +24,9 @@ export default function AdminModels() {
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
-    // const [showModal, setShowModal] = useState(false);
+    const [modelRepairs, setModelRepairs] = useState<any[]>([]);
+    const [selecttedModel, setSelectedModel] = useState<ModelDTO | null>(null);
+    const [showModal, setShowModal] = useState(false);
     // const [selectedModel, setSelectedModel] = useState<ModelDTO | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isAdmin, setIsAdmin] = useState<boolean | undefined>(undefined);
@@ -75,6 +78,19 @@ export default function AdminModels() {
 
         fetchUser();
     }, []);
+
+    function repairsByModel(model: ModelDTO) {
+        api.get('api/v1/repairs/by-model/' + model.id)
+            .then(response => {
+                console.log("Repairs del model:", response.data);
+                setModelRepairs(response.data);
+                setSelectedModel(model);
+                setShowModal(true);
+            })
+            .catch(error => {
+                console.error("Error obteniendo reparaciones del modelo:", error);
+            });
+    }
 
     // 🔹 Aplica filtros
     const filteredModels = models.filter(model => {
@@ -176,6 +192,7 @@ export default function AdminModels() {
                         <col className="w-32" />   {/* Name */}
                         <col className="w-28" />   {/* Brand */}
                         <col className="w-48" />   {/* Device Type */}
+                        <col className="w-28" />   {/* repairs */}
                         <col className="w-28" />   {/* createdAt */}
                         <col className="w-60" />   {/* updatedAt */}
                         <col className="w-20" />   {/* Active */}
@@ -187,6 +204,7 @@ export default function AdminModels() {
                         <th className="px-3 py-1 text-left">Nombre</th>
                         <th className="px-3 py-1 text-left">Marca</th>
                         <th className="px-3 py-1 text-left">Tipo de Dispositivo</th>
+                        <th className="px-3 py-1 text-left">Reparaciones</th>
                         <th className="px-3 py-1 text-left">Fecha de Creación</th>
                         <th className="px-3 py-1 text-left">Fecha de Actualización</th>
                         <th className="px-3 py-1 text-left">Activo</th>
@@ -204,6 +222,7 @@ export default function AdminModels() {
                         <col className="w-28" />
                         <col className="w-48" />
                         <col className="w-28" />
+                        <col className="w-28" />
                         <col className="w-60" />
                         <col className="w-20" />
                         <col className="w-20" />
@@ -217,6 +236,17 @@ export default function AdminModels() {
                                 <td className="px-3 py-1 text-sm">{model.name}</td>
                                 <td className="px-3 py-1 text-sm">{model.brand}</td>
                                 <td className="px-3 py-1 text-sm">{model.deviceType}</td>
+                                <td className="px-3 py-1 text-sm">
+                                    <button
+                                        onClick={async (e) => {
+                                            e.stopPropagation();
+                                            repairsByModel(model)}}
+                                        className="px-4 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-colors"
+                                        >
+                                        Ver Reparaciones
+                                    </button>
+                                </td>
+
                                 <td className="px-3 py-1 text-sm">{model.createdAt}</td>
                                 <td className="px-3 py-1 text-sm">{model.updatedAt}</td>
                                 <td className="px-3 py-1 text-sm">{model.active ? "Sí" : "No"}</td>
@@ -307,36 +337,34 @@ export default function AdminModels() {
                     Crear modelo
                 </Link>
             </div>
-            {/* <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                 <h2 className="text-xl font-bold mb-4">
-                    Modelos de {selectedBrand?.name ?? 'N/A'}
+                    Reparaciones de {selecttedModel?.name}
                 </h2>
 
-                {!(selectedBrand?.models && selectedBrand.models.length > 0) ? (
-                    <p>No hay modelos para esta marca.</p>
+                {modelRepairs.length === 0 ? (
+                    <p>No hay reparaciones para este usuario.</p>
                 ) : (
                     <ul className="space-y-4">
-                    {(selectedBrand?.models ?? []).map((model: ModelDTO) => (
-                        <li key={model.id} className="border rounded p-4 cursor-pointer hover:bg-gray-100"
-                        onClick={() => router.push(`/admin/models/${model.id}`)}>
-                        <p><strong>ID:</strong> {model.id}</p>
-                        <p><strong>Nombre del modelo:</strong> {model.name}</p>
-                        <p><strong>Creado:</strong> {model.createdAt}</p>
-                        <p><strong>Actualizado:</strong> {model.updatedAt}</p>
+                    {modelRepairs.map((repair) => (
+                        <li key={repair.id}
+                        onClick={() => {
+                            router.push(`/admin/repairs/${repair.id}`);
+                            setShowModal(false);
+                        }}
+                        className="border rounded p-4">
+                            <p><strong>Id:</strong> {repair.id}</p>
+                            <p><strong>Precio:</strong> {repair.price}</p>
+                            <p><strong>Tipo de Reparación:</strong> {repair.repairTypeName}</p>
+                            <p><strong>Creado:</strong> {new Date(repair.createdAt).toLocaleString()}</p>
+                            <p><strong>Actualizado:</strong> {new Date(repair.updatedAt).toLocaleString()}</p>
                         </li>
+                        
                     ))}
                     </ul>
                 )}
-                <Link
-                    onClick={(e) => e.stopPropagation()} // evita que se dispare el click de la fila
-                    href="/admin/models/create"
-                    className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-4 inline-block"
-                >
-                    Crear modelo
-                </Link>
-            </Modal> */}
-
-
+            </Modal>
         </div>
     );
 }

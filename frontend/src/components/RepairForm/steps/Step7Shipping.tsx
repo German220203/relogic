@@ -4,6 +4,7 @@
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import NavButtons from '@/components/NavButtons';
 
 type Props = {
   nextStep: () => void
@@ -38,11 +39,6 @@ export default function Step7Shipping({ nextStep, prevStep, formData, updateForm
     resolver: zodResolver(shippingSchema),
     defaultValues: formData.shipping,
   })
-
-  // const onSubmit = (data: ShippingData) => {
-  //   updateForm({ shipping: data })
-  //   nextStep()
-  // }
 
   const onSubmit = (data: ShippingData) => {
     const fullAddress = [
@@ -105,6 +101,7 @@ export default function Step7Shipping({ nextStep, prevStep, formData, updateForm
               className={`w-full rounded-xl border p-4 font-medium transition-all duration-200
                 ${errors.lastName ? 'border-red-500' : 'border-gray-300'}
                 text-gray-800 bg-white`}
+              
             />
             {errors.lastName && <p className="text-red-500">{errors.lastName.message}</p>}
           </div>
@@ -166,6 +163,9 @@ export default function Step7Shipping({ nextStep, prevStep, formData, updateForm
               className={`w-full rounded-xl border p-4 font-medium transition-all duration-200
                 ${errors.postalCode ? 'border-red-500' : 'border-gray-300'}
                 text-gray-800 bg-white`}
+              value={formData.postalCode}
+              readOnly
+
             />
             {errors.postalCode && <p className="text-red-500">{errors.postalCode.message}</p>}
           </div>
@@ -192,23 +192,10 @@ export default function Step7Shipping({ nextStep, prevStep, formData, updateForm
       </div>
 
       {/* Botones */}
-      <div className="flex items-center justify-center mt-4 w-full">
-        <button
-          type="button"
-          onClick={() => prevStep()}
-          className="px-6 py-2 bg-red-500 text-white rounded-full text-sm mr-2
-            transition-colors duration-300 hover:bg-white hover:text-red-500 border border-red-500"
-        >
-          Volver
-        </button>
-        <button
-          type="submit"
-          className="px-6 py-2 bg-blue-500 text-white rounded-full text-sm ml-2
-            transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500"
-        >
-          Continuar
-        </button>
-      </div>
+      <NavButtons
+        onPrev={prevStep}
+        onNext={handleSubmit(onSubmit)}
+      />
     </form>
   )
 }

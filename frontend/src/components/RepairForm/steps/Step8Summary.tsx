@@ -3,6 +3,8 @@
 
 import { useState } from 'react'
 import api from '@/lib/api'
+import Image from 'next/image';
+import NavButtons from '@/components/NavButtons';
 
 type Props = {
   prevStep: () => void
@@ -153,21 +155,12 @@ export default function Step8Summary({ prevStep, formData }: Props) {
       </div>
 
       {error && <p className="text-red-600 mt-4">{error}</p>}
-
-      {/* <button
-        onClick={handleConfirm}
-        disabled={loading}
-        className="mt-6 w-full px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
-        type="button"
-      >
-        {loading ? 'Enviando...' : 'Confirmar Pedido'}
-      </button> */}
-      <div className='flex items-center justify-center mt-4'>
-        <button onClick={() => prevStep()} className="px-6 py-2 bg-red-500 text-white rounded-full text-sm mr-2 transition-colors duration-300 hover:bg-white hover:text-red-500 border border-red-500">Volver</button>
-        <button onClick={handleConfirm} disabled={loading} type="button" className="px-6 py-2 bg-green-600 text-white rounded-full text-sm ml-2 transition-colors duration-300 hover:bg-white hover:text-green-600 border border-green-600">
-          {loading ? 'Enviando...' : 'Confirmar Pedido'}
-        </button>
-      </div>
+      <NavButtons
+        onPrev={prevStep}
+        onNext={handleConfirm}
+        nextVariant="green"
+        nextIcon="/icons/check.svg"
+      />
     </div>
   )
 }

@@ -40,6 +40,7 @@ export default function AdminDeviceTypes() {
     const [size, setSize] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
     const [showModal, setShowModal] = useState(false);
+    const [showCreateModelModal, setShowCreateModelModal] = useState(false);
     const [selectedBrand, setSelectedBrand] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isAdmin, setIsAdmin] = useState<boolean | undefined>(undefined);
@@ -88,7 +89,8 @@ export default function AdminDeviceTypes() {
         async function fetchBrands() {
             try {
                 const res = await api.get("/api/v1/brands");
-                setBrands(res.data);
+                setBrands(res.data.content);
+                console.log("Brands cargadas:", res.data.content);
             } catch (e) {
                 console.error("Error cargando brands:", e);
             }
@@ -112,12 +114,13 @@ export default function AdminDeviceTypes() {
         }
         try {
             let res;
+            console.log("Creando modelo con:", { modelName, selectedBrand, deviceType: selectedDeviceType.id });
             res = await api.post(
                 "/api/v1/models",
-                { 
+                {
                 name: modelName,
-                brand: selectedBrand.id, 
-                deviceType: selectedDeviceType
+                brand: selectedBrand,
+                deviceType: selectedDeviceType.id
                 },
                 { withCredentials: true }
             );
@@ -128,9 +131,10 @@ export default function AdminDeviceTypes() {
                 setModelName("");
                 setSelectedDeviceType(null);
                 router.refresh();
-                const updatedBrand = await api.get(`/api/v1/brands/${selectedBrand.id}`);
-                setSelectedBrand(updatedBrand.data);
+                const updatedDeviceType = await api.get(`/api/v1/device-types/${selectedDeviceType.id}`);
+                setSelectedDeviceType(updatedDeviceType.data);
                 setShowModal(true); // mantener el modal de modelos abierto
+                setShowCreateModelModal(false); // cerrar el modal de creación
             } else {
                 setErrorMessage(res?.data.message || "Hubo un error al guardar");
             }
@@ -267,7 +271,7 @@ export default function AdminDeviceTypes() {
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setSelectedDeviceType(deviceType);
-                                                // setShowCreateModelModal(true);
+                                                setShowCreateModelModal(true);
                                             }}
                                             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-4"
                                         >
@@ -359,23 +363,23 @@ export default function AdminDeviceTypes() {
             </div>
             <div className="mt-4">
                 <Link
-                    href="/admin/brands/create"
+                    href="/admin/device-types/create"
                     className="px-4 py-2 bg-green-500 text-white rounded"
                 >
-                    Crear marca
+                    Crear Tipo de Dispositivo
                 </Link>
             </div>
-            {/* <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                 <h2 className="text-xl font-bold mb-4">
-                    Modelos de {selectedBrand?.name ?? 'N/A'}
+                    Modelos de {selectedDeviceType?.name ?? 'N/A'}
                 </h2>
 
-                {!(selectedBrand?.models && selectedBrand.models.length > 0) ? (
-                    <p>No hay modelos para esta marca.</p>
+                {!(selectedDeviceType?.models && selectedDeviceType.models.length > 0) ? (
+                    <p>No hay modelos para este tipo de dispositivo.</p>
                 ) : (
                     <div className="max-h-80 overflow-y-auto rounded p-2">
                         <ul className="space-y-4">
-                            {(selectedBrand?.models ?? []).map((model: ModelDTO) => (
+                            {(selectedDeviceType?.models ?? []).map((model: ModelDTO) => (
                                 <li
                                     key={model.id}
                                     className="border rounded p-4 cursor-pointer hover:bg-gray-100"
@@ -400,12 +404,12 @@ export default function AdminDeviceTypes() {
                 >
                     Crear modelo
                 </button>
-                </Modal> */}
+                </Modal>
 
             {/* modal de crear modelo */}
-            {/* <Modal isOpen={showCreateModelModal} onClose={() => setShowCreateModelModal(false)}>
+            <Modal isOpen={showCreateModelModal} onClose={() => setShowCreateModelModal(false)}>
                 <h2 className="text-xl font-bold mb-4">
-                    Crear modelo para {selectedBrand?.name}
+                    Crear modelo para {selectedDeviceType?.name}
                 </h2>
                 {errorMessage && (
                     <p className="text-red-600 text-sm mt-2">{errorMessage}</p>
@@ -422,25 +426,30 @@ export default function AdminDeviceTypes() {
                     </div>
                     <div>
                         <label className="block font-semibold">Marca</label>
-                        <input
+                        {/* <input
                             type="text"
-                            value={selectedBrand?.name ?? ""}
-                            disabled
-                            className="w-full border px-2 py-1 rounded bg-gray-100"
-                        />
+                            value={selectedBrand ?? ""}
+                            onChange={(e) => setSelectedBrand(Number(e.target.value))}
+                            className="w-full border px-2 py-1 rounded"
+                        /> */}
+                        <select
+                            value={selectedBrand ?? ""}
+                            onChange={(e) => setSelectedBrand(Number(e.target.value))}
+                            className="w-full border px-2 py-1 rounded"
+                        >
+                            <option value="">Selecciona una marca</option>
+                            {brands.map((brand) => (
+                                <option key={brand.id} value={brand.id}>{brand.name}</option>
+                            ))}
+                        </select>
                     </div>
                     <div>
                         <label className="block font-semibold">Device Type</label>
-                        <select
-                            value={selectedDeviceType ?? ""}
-                            onChange={(e) => setSelectedDeviceType(Number(e.target.value))}
-                            className="w-full border px-2 py-1 rounded"
-                        >
-                            <option value="">Selecciona un device type</option>
-                            {deviceTypes.map((dt) => (
-                                <option key={dt.id} value={dt.id}>{dt.name}</option>
-                            ))}
-                        </select>
+                        <input
+                            value={selectedDeviceType?.name ?? ""}
+                            disabled
+                            className="w-full border px-2 py-1 rounded  bg-gray-100"
+                        />
                     </div>
                     <div className="flex justify-end space-x-2">
                         <button
@@ -457,7 +466,7 @@ export default function AdminDeviceTypes() {
                         </button>
                     </div>
                 </div>
-            </Modal> */}
+            </Modal>
 
 
         </div>

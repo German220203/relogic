@@ -6,6 +6,8 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import Image from 'next/image';
+import NavButtons from '@/components/NavButtons'
 
 type Props = {
   nextStep: () => void
@@ -41,23 +43,6 @@ export default function Step5PostalCode({ nextStep, prevStep, formData, updateFo
 
     updateForm({ postalCode: data.postalCode })
     nextStep()
-
-
-    // try {
-    //   const res = await fetch(`/api/coverage?postalCode=${data.postalCode}`)
-    //   const json = await res.json()
-
-    //   if (!json.available) {
-    //     setErrorAPI('Lo sentimos, no ofrecemos servicio en ese código postal.')
-    //   } else {
-    //     updateForm({ postalCode: data.postalCode })
-    //     nextStep()
-    //   }
-    // } catch (err) {
-    //   setErrorAPI('Error al verificar la disponibilidad. Intenta de nuevo.')
-    // } finally {
-    //   setIsChecking(false)
-    // }
   }
 
   
@@ -78,22 +63,12 @@ export default function Step5PostalCode({ nextStep, prevStep, formData, updateFo
       {errors.postalCode && <p className="text-red-500 w-full mb-2">{errors.postalCode.message}</p>}
       {errorAPI && <p className="text-red-500 w-full mb-2">{errorAPI}</p>}
 
-      <div className='flex items-center justify-center mt-4 w-full'>
-        <button
-          type="button"
-          onClick={() => prevStep()}
-          className="px-6 py-2 bg-red-500 text-white rounded-full text-sm mr-2 transition-colors duration-300 hover:bg-white hover:text-red-500 border border-red-500"
-        >
-          Volver
-        </button>
-        <button
-          type="submit"
-          className="px-6 py-2 bg-blue-500 text-white rounded-full text-sm ml-2 transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500"
-          disabled={isChecking}
-        >
-          {isChecking ? 'Verificando...' : 'Continuar'}
-        </button>
-      </div>
+      <NavButtons
+        onPrev={prevStep}
+        onNext={handleSubmit(onSubmit)}
+        disableNext={isChecking}
+        isChecking={isChecking}
+      />
     </form>
   )
 }

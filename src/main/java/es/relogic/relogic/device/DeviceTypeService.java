@@ -2,14 +2,15 @@ package es.relogic.relogic.device;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.relogic.relogic.brand.Brand;
 import es.relogic.relogic.device.response.DeviceTypePageResponse;
+import es.relogic.relogic.device.response.DeviceTypeResponse;
 import es.relogic.relogic.model.Model;
 import lombok.RequiredArgsConstructor;
 
@@ -19,8 +20,35 @@ public class DeviceTypeService {
 
     private final DeviceTypeRepository deviceTypeRepository;
 
-    public DeviceType createDeviceType(DeviceType deviceType) {
-        return deviceTypeRepository.save(deviceType);
+    public DeviceTypeResponse createDeviceType(DeviceType deviceType) {
+        if (deviceType.getName() != null) {
+            Optional<DeviceType> existingDeviceType = deviceTypeRepository.findByName(deviceType.getName());
+            if (existingDeviceType.isPresent()) {
+                return new DeviceTypeResponse(false, existingDeviceType.get(), "El tipo de dispositivo ya existe");
+            }
+        }
+
+        DeviceType savedDeviceType = deviceTypeRepository.save(deviceType);
+        return new DeviceTypeResponse(true, savedDeviceType, "Tipo de dispositivo creado exitosamente");
+    }
+
+    @Transactional
+    public DeviceTypeResponse updateDeviceType(Integer id, DeviceType deviceType) {
+        if (deviceType.getId() != null || id != null || id != deviceType.getId()) {
+            Optional<DeviceType> existingDeviceType = deviceTypeRepository.findById(Long.valueOf(id));
+            if (existingDeviceType.isPresent()) {
+                existingDeviceType.get().setName(deviceType.getName());
+                existingDeviceType.get().setImage(deviceType.getImage());
+                deviceTypeRepository.save(existingDeviceType.get());
+                return new DeviceTypeResponse(true, existingDeviceType.get(), "Tipo de dispositivo actualizado exitosamente");
+            }
+            else {
+                return new DeviceTypeResponse(Boolean.FALSE, (DeviceType) null, "El tipo de dispositivo no existe");
+            }
+        }
+        else {
+            return new DeviceTypeResponse(Boolean.FALSE, (DeviceType) null, "ID de tipo de dispositivo no proporcionado");
+        }
     }
 
     public DeviceType getDeviceTypeById(Long id) {
@@ -54,7 +82,7 @@ public class DeviceTypeService {
     }
 
     @Transactional(readOnly = true)
-    public DeviceTypePageResponse findAll(Pageable pageable) {
+    public DeviceTypePageResponse findAllPageable(Pageable pageable) {
         Page<DeviceTypeDTO> deviceTypesPage = deviceTypeRepository.findByActiveTrue(pageable).map(b -> new DeviceTypeDTO(b));
         return new DeviceTypePageResponse(
             deviceTypesPage.getTotalElements(),
@@ -94,6 +122,11 @@ public class DeviceTypeService {
 
         }
         return result;
+    }
+
+    public DeviceTypeDTO findById(Integer id) {
+        // TODO Auto-generated method stub
+        return deviceTypeRepository.findById(Long.valueOf(id)).map(DeviceTypeDTO::new).get();
     }
 
 }

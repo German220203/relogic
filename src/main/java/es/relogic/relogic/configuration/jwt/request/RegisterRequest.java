@@ -17,9 +17,7 @@ public class RegisterRequest {
 
     String firstName;
 
-    String lastName1;
-
-    String lastName2;
+    String lastName;
 
     String email;
 

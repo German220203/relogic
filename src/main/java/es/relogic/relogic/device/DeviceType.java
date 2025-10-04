@@ -31,6 +31,9 @@ public class DeviceType extends BaseEntity{
     @NotBlank
     private String name;
 
+    @Column(name = "image")
+    private String image;
+
     // Relationships
 
     @OneToMany(mappedBy = "deviceType")

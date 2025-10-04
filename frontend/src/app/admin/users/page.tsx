@@ -8,18 +8,11 @@ class User {
     id!: number;
     username!: string;
     firstName!: string;
-    lastName1!: string;
-    lastName2!: string;
+    lastName!: string;
     email!: string;
     phone!: string;
     authority!: string;
 }
-
-// class Response {
-//     totalElements!: number;
-//     totalPages!: number;
-//     content!: User[];
-// }
 
 class Reparation {
     id!: number;
@@ -128,13 +121,9 @@ export default function AdminUsers() {
     const filteredUsers = users.filter(user =>
         user.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.lastName1?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-    // if (loading) {
-    //     return <div>Cargando...</div>;
-    // }
 
     if (isAdmin === undefined) {
         // Mientras se carga, no renderizamos nada (o mostramos un loader)
@@ -182,8 +171,7 @@ export default function AdminUsers() {
                         <col className="w-12" />   {/* ID */}
                         <col className="w-32" />   {/* Username */}
                         <col className="w-28" />   {/* Nombre */}
-                        <col className="w-28" />   {/* Apellido 1 */}
-                        <col className="w-28" />   {/* Apellido 2 */}
+                        <col className="w-28" />   {/* Apellido */}
                         <col className="w-60" />   {/* Email */}
                         <col className="w-32" />   {/* Teléfono */}
                         <col className="w-24" />   {/* Rol */}
@@ -195,8 +183,7 @@ export default function AdminUsers() {
                         <th className="px-3 py-1 text-left">ID</th>
                         <th className="px-3 py-1 text-left">Nombre de Usuario</th>
                         <th className="px-3 py-1 text-left">Nombre</th>
-                        <th className="px-3 py-1 text-left">Apellido 1</th>
-                        <th className="px-3 py-1 text-left">Apellido 2</th>
+                        <th className="px-3 py-1 text-left">Apellido</th>
                         <th className="px-3 py-1 text-left">Email</th>
                         <th className="px-3 py-1 text-left">Teléfono</th>
                         <th className="px-3 py-1 text-left">Rol</th>
@@ -214,7 +201,6 @@ export default function AdminUsers() {
                         <col className="w-32" />
                         <col className="w-28" />
                         <col className="w-28" />
-                        <col className="w-28" />
                         <col className="w-60" />
                         <col className="w-32" />
                         <col className="w-24" />
@@ -227,8 +213,7 @@ export default function AdminUsers() {
                             <td className="px-3 py-1 text-sm">{user.id}</td>
                             <td className="px-3 py-1 text-sm">{user.username}</td>
                             <td className="px-3 py-1 text-sm">{user.firstName}</td>
-                            <td className="px-3 py-1 text-sm">{user.lastName1}</td>
-                            <td className="px-3 py-1 text-sm">{user.lastName2}</td>
+                            <td className="px-3 py-1 text-sm">{user.lastName}</td>
                             <td className="px-3 py-1 text-sm">{user.email}</td>
                             <td className="px-3 py-1 text-sm">{user.phone}</td>
                             <td className="px-3 py-1 text-sm">{user.authority}</td>

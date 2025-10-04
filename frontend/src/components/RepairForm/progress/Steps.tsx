@@ -27,7 +27,13 @@ export default function Steps({
   setStep: (s: number) => void
 }) {
   return (
-    <div className="rounded-lg bg-blue-600 p-6 flex flex-row md:flex-col gap-6 flex-wrap md:gap-4">
+    <div
+    style={{ backgroundImage: 'url("/circuitos.png")',
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+    }}
+    className="rounded-lg p-6 flex flex-row md:flex-col gap-6 flex-wrap md:gap-4">
       {steps.map((s, i) => {
         let subtitle = '\u00A0'
         if (s.key && formData[s.key]) {
@@ -63,15 +69,15 @@ export default function Steps({
             onClick={() => {
               if (!isLocked) setStep(stepNumber)
             }}
-            className="flex items-center p-1 rounded-lg md:items-start gap-3 group w-full hover:scale-105 active:scale-95 transition-all duration-200 hover:bg-blue-500 hover:shadow-lg"
+            className="flex items-center p-1 rounded-lg md:items-start gap-3 group w-full hover:scale-105 active:scale-95 transition-all duration-200 hover:shadow-xl/35"
           >
             {/* Círculo indicador */}
             <div
               className={`
                 flex items-center justify-center w-8 h-8 rounded-full border-2 transition-colors duration-200
-                ${isCompleted ? 'bg-green-500 border-green-500 text-white' :
-                  isActive ? 'bg-white border-blue-300 text-blue-600' :
-                  'border-white text-white group-hover:border-blue-200'}
+                ${isCompleted ? 'bg-white text-emerald-600 border-white' :
+                  isActive ? 'bg-white text-emerald-600 border-white' :
+                  'border-white text-white '}
               `}
             >
               {isCompleted ? '✓' : stepNumber}
@@ -82,12 +88,12 @@ export default function Steps({
               <span
                 className={`
                   text-sm font-semibold transition-colors
-                  ${isActive ? 'text-white' : 'text-blue-100'}
+                  ${isActive ? 'text-white' : 'text-white'}
                 `}
               >
                 {s.label}
               </span>
-              <span className="text-xs text-blue-200 truncate max-w-[120px]">
+              <span className="text-xs text-white truncate max-w-[120px]">
                 {subtitle}
               </span>
             </div>

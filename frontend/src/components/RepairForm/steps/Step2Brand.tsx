@@ -2,9 +2,9 @@
 
 import api from '@/lib/api';
 import { useEffect, useState } from 'react'
+import NavButtons from '@/components/NavButtons';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/no-explicit-any
-type Props = { nextStep: Function; prevStep: Function; formData: any; updateForm: Function }
+type Props = { nextStep: () => void; prevStep: () => void; formData: any; updateForm: Function }
 
 export default function Step2Brand({ nextStep, prevStep, formData, updateForm }: Props) {
   const [brands, setBrands] = useState<{ id: string; name: string }[]>([])
@@ -46,8 +46,8 @@ export default function Step2Brand({ nextStep, prevStep, formData, updateForm }:
             className={`
               p-4 rounded-xl border text-center font-medium transition-all duration-200
               ${formData.brandId === b.id
-                ? 'bg-blue-500 text-white border-blue-700'
-                : 'bg-white text-gray-800 border-gray-300 hover:bg-blue-100'}
+                ? 'bg-emerald-600 text-white'
+                : 'bg-white text-gray-800 border-gray-300 hover:bg-emerald-50'}
               hover:scale-105 active:scale-95 hover:shadow-lg
             `}
           >
@@ -55,15 +55,9 @@ export default function Step2Brand({ nextStep, prevStep, formData, updateForm }:
           </button>
         ))}
       </div>
-
-      <div className='flex items-center justify-center mt-4'>
-        <button
-          onClick={() => prevStep()}
-          className="px-6 py-2 bg-red-500 text-white rounded-full text-sm mr-2 transition-colors duration-300 hover:bg-white hover:text-red-500 border border-red-500"
-        >
-          Volver
-        </button>
-      </div>
+      <NavButtons
+        onPrev={prevStep}
+      />
     </div>
   )
 }

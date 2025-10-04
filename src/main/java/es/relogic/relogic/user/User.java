@@ -37,11 +37,8 @@ public class User extends BaseEntity implements UserDetails{
     @Column(name = "first_name")
     String firstName;
 
-    @Column(name = "last_name_1")
-    String lastName1;
-
-    @Column(name = "last_name_2")
-    String lastName2;
+    @Column(name = "last_name")
+    String lastName;
 
     @Column(name = "email", unique = true)
     String email;

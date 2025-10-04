@@ -17,8 +17,8 @@ public class RepairDTO {
     private Double price;
     private String repairTypeName;
     private Integer modelId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String createdAt;
+    private String updatedAt;
 
     public RepairDTO(Repair repair) {
         this.id = repair.getId();

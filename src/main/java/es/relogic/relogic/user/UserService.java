@@ -53,8 +53,7 @@ public class UserService {
         User existingUser = this.getUserById(id);
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setFirstName(updatedUser.getFirstName());
-        existingUser.setLastName1(updatedUser.getLastName1());
-        existingUser.setLastName2(updatedUser.getLastName2());
+        existingUser.setLastName(updatedUser.getLastName());
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setPhone(updatedUser.getPhone());
         return this.userRepository.save(existingUser);

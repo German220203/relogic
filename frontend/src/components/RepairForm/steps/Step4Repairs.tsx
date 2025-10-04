@@ -3,6 +3,8 @@
 
 import api from '@/lib/api'
 import { useEffect, useState } from 'react'
+import Image from 'next/image';
+import NavButtons from '@/components/NavButtons';
 
 type Props = {
   nextStep: () => void
@@ -76,8 +78,8 @@ export default function Step4Repairs({ nextStep, prevStep, formData, updateForm 
             onClick={() => toggleRepair(repair.id)}
             className={`flex flex-col items-start gap-1 border p-4 rounded-xl cursor-pointer transition-all duration-200
               ${selected.includes(repair.id)
-                ? 'bg-blue-100 border-blue-500'
-                : 'bg-white text-gray-800 border-gray-300 hover:bg-blue-50'}
+                ? 'bg-emerald-100 border-green-500'
+                : 'bg-white text-gray-800 border-gray-300 hover:bg-emerald-50'}
               hover:scale-105 active:scale-95 hover:shadow-lg
             `}
           >
@@ -87,21 +89,10 @@ export default function Step4Repairs({ nextStep, prevStep, formData, updateForm 
         ))}
       </div>
 
-      <div className="flex items-center justify-center mt-4">
-        <button
-          onClick={() => prevStep()}
-          className="px-6 py-2 bg-red-500 text-white rounded-full text-sm mr-2 transition-colors duration-300 hover:bg-white hover:text-red-500 border border-red-500"
-        >
-          Volver
-        </button>
-        {repairs.length > 0 && (
-          <button
-            onClick={handleContinue}
-            className="px-6 py-2 bg-blue-500 text-white rounded-full text-sm ml-2 transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500"
-          >
-            Continuar
-          </button>)}
-      </div>
+      <NavButtons
+        onPrev={prevStep}
+        onNext={handleContinue}
+      />
     </div>
   )
 }
