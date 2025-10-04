@@ -66,12 +66,12 @@ export default function Step3Model({ nextStep, prevStep, formData, updateForm }:
             className={`
               p-4 rounded-xl border text-center font-medium transition-all duration-200
               ${formData.modelId === m.id
-                ? 'bg-emerald-600 text-white'
+                ? 'border-2 border-emerald-600 text-emerald-600'
                 : 'bg-white text-gray-800 border-gray-300 hover:bg-emerald-50'}
               hover:scale-105 active:scale-95 hover:shadow-lg
             `}
           >
-            {m.name}
+            <p className="text-emerald-600 text-sm font-medium">{m.name}</p>
           </button>
         ))}
       </div>

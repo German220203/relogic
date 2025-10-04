@@ -30,20 +30,43 @@ INSERT INTO users (id, username, password, first_name, last_name, email, phone, 
 
 
 -- ======= BRANDS =======
-INSERT INTO brands (id, name, image, active) VALUES (1, 'Apple', 'apple.png', true);
-INSERT INTO brands (id, name, image, active) VALUES (2, 'Samsung', 'samsung.png', true);
-INSERT INTO brands (id, name, image, active) VALUES (3, 'Huawei', 'huawei.png', false);
+INSERT INTO brands (id, name, image, active) VALUES (1, 'Apple', '/images/brands/apple.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (2, 'Samsung', '/images/brands/samsung.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (3, 'Huawei', '/images/brands/huawei.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (4, 'BQ', '/images/brands/bq.png', true);
+INSERT INTO brands (id, name, image, active) VALUES (5, 'Google', '/images/brands/google.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (6, 'HTC', '/images/brands/htc.png', true);
+INSERT INTO brands (id, name, image, active) VALUES (7, 'LG', '/images/brands/lg.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (8, 'Motorola', '/images/brands/motorola.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (9, 'Nokia', '/images/brands/nokia.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (10, 'OnePlus', '/images/brands/oneplus.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (11, 'Oppo', '/images/brands/Oppo.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (12, 'Sony', '/images/brands/sony.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (13, 'Xiaomi', '/images/brands/nokia.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (14, 'ZTE', '/images/brands/zte.png', true);
 
 -- ======= DEVICE TYPES =======
-INSERT INTO device_types (id, name, active) VALUES (1, 'Móvil', true);
-INSERT INTO device_types (id, name, active) VALUES (2, 'Tablet', true);
-INSERT INTO device_types (id, name, active) VALUES (3, 'Portátil', true);
-INSERT INTO device_types (id, name, active) VALUES (4, 'Electrodomésticos', true);
+INSERT INTO device_types (id, name, image, active) VALUES (1, 'Móvil', '/images/devices-types/movil.svg', true);
+INSERT INTO device_types (id, name, image, active) VALUES (2, 'Tablet', '/images/devices-types/tablet.svg', true);
+INSERT INTO device_types (id, name, image, active) VALUES (3, 'Portátil', '/images/devices-types/laptop.svg', true);
+INSERT INTO device_types (id, name, image, active) VALUES (4, 'Electrodomésticos', '/images/devices-types/electrical.svg', true);
 
 -- ======= MODELS =======
 INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (1, 'iPhone 13', 1, 1, true);
 INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (2, 'Galaxy S21', 2, 1, true);
 INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (3, 'iPad Pro', 1, 2, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (4, 'Modelo Huawei', 3, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (5, 'Modelo BQ', 4, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (6, 'Modelo Google', 5, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (7, 'Modelo HTC', 6, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (8, 'Modelo LG', 7, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (9, 'Modelo Motorola', 8, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (10, 'Modelo Nokia', 9, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (11, 'Modelo OnePlus', 10, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (12, 'Modelo Oppo', 11, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (13, 'Modelo Sony', 12, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (14, 'Modelo Xiaomi', 13, 1, true);
+INSERT INTO models (id, name, brand_id, device_type_id, active) VALUES (15, 'Modelo ZTE', 14, 1, true);
 
 -- ======= REPAIR TYPES =======
 INSERT INTO repair_types (id, name, description, active) VALUES (1, 'Screen Replacement', 'Replace cracked or broken screen', true);

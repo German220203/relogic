@@ -38,6 +38,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF para simplificar, no recomendado en producción
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/images/**").permitAll() // 👈 AÑADIR ESTA LÍNEA
                 .requestMatchers("/api/v1/auth/**").permitAll() // Permitir el acceso a las rutas de autenticación
                 .requestMatchers("/api/v1/brands").permitAll() // Permitir el acceso a las rutas de marcas
                 .requestMatchers("/api/v1/user/current").permitAll() // Permitir el acceso a las rutas de modelos

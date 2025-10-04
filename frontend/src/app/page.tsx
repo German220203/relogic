@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
@@ -113,11 +114,16 @@ export default function Home() {
                 <button
                   key={t.id}
                   onClick={() => handleSelectDevice(t)}
-                  className="p-6 rounded-xl border text-center font-medium transition-all duration-200
+                  className="flex items-center justify-center p-6 rounded-xl border text-center font-medium transition-all duration-200
                              bg-white text-emerald-600 border-gray-300 hover:bg-emerald-50
                              hover:scale-105 active:scale-95 hover:shadow-lg w-full"
                 >
-                  {t.name}
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${t.image}`}
+                    alt={t.name}
+                    width={80}
+                    height={80}
+                  />
                 </button>
               ))
             )}
