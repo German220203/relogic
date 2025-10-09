@@ -87,7 +87,7 @@ INSERT INTO status (id, status, active) VALUES (6, 'CANCELLED', true);
 
 -- ======= ORDERS =======
 INSERT INTO orders (id, order_number, status, user_id, active)
-VALUES (1, '550e8400-e29b-41d4-a716-446655440000', 1, 1, true);
+VALUES (1, '550e8400-e29b-41d4-a716-446655440000', 4, 1, true);
 
 INSERT INTO orders (id, order_number, status, user_id, active)
 VALUES (2, '550e8400-e29b-41d4-a716-446655440001', 5, 2, true);
