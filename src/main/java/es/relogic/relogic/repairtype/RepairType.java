@@ -1,4 +1,4 @@
-package es.relogic.relogic.repair;
+package es.relogic.relogic.repairtype;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import es.relogic.relogic.models.BaseEntity;
+import es.relogic.relogic.repair.Repair;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
