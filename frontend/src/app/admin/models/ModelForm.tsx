@@ -105,10 +105,10 @@ export default function ModelForm({ mode, modelId }: ModelFormProps) {
       if (mode === "create") {
       res = await api.post<ModelResponse>(
         "/api/v1/models",
-        { 
-          name, 
-          brand: { id: parseInt(brand) }, 
-          deviceType: { id: parseInt(deviceType) } 
+        {
+          name,
+          brand: parseInt(brand),
+          deviceType: parseInt(deviceType)
         },
         { withCredentials: true }
       );
@@ -117,8 +117,8 @@ export default function ModelForm({ mode, modelId }: ModelFormProps) {
         `/api/v1/models/${modelId}`,
         { 
           name, 
-          brand: { id: parseInt(brand) }, 
-          deviceType: { id: parseInt(deviceType) } 
+          brandId: parseInt(brand), 
+          deviceTypeId: parseInt(deviceType)
         },
         { withCredentials: true }
       );
