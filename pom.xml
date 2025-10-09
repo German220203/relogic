@@ -126,6 +126,12 @@
     		<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
     		<version>2.1.0</version>
 		</dependency>
+		<!-- dotenv-java -->
+		 <dependency>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>dotenv-java</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 		<!-- Other J2EE required libraries -->
 		<dependency>
         	<groupId>javax.xml.bind</groupId>
