@@ -1,7 +1,7 @@
 package es.relogic.relogic.repair;
 
-import java.time.LocalDateTime;
 
+import es.relogic.relogic.model.ModelDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,17 +16,19 @@ public class RepairDTO {
     private Integer id;
     private Double price;
     private String repairTypeName;
-    private Integer modelId;
+    private ModelDTO model;
     private String createdAt;
     private String updatedAt;
+    private Boolean active;
 
     public RepairDTO(Repair repair) {
         this.id = repair.getId();
         this.price = repair.getPrice();
         this.repairTypeName = repair.getRepairType() != null ? repair.getRepairType().getName() : null;
-        this.modelId = repair.getModel() != null ? repair.getModel().getId() : null;
+        this.model = repair.getModel() != null ? new ModelDTO(repair.getModel()) : null;
         this.createdAt = repair.getCreatedAt();
         this.updatedAt = repair.getUpdatedAt();
+        this.active = repair.getActive();
     }
 
 

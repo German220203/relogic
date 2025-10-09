@@ -3,6 +3,7 @@ package es.relogic.relogic.repair;
 import java.util.Set;
 
 import es.relogic.relogic.model.Model;
+import es.relogic.relogic.repairtype.RepairType;
 import es.relogic.relogic.models.BaseEntity;
 import es.relogic.relogic.order.Order;
 import jakarta.persistence.Column;
