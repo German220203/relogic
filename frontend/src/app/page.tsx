@@ -9,6 +9,7 @@ import Image from "next/image";
 export default function Home() {
   const router = useRouter();
   const [types, setTypes] = useState<any[]>([]);
+  const [showCookieBanner, setShowCookieBanner] = useState(false);
 
   useEffect(() => {
     api.get('/api/v1/device-types')
@@ -20,9 +21,37 @@ export default function Home() {
     router.push(`/reparation?deviceTypeId=${t.id}&deviceTypeName=${encodeURIComponent(t.name)}`);
   }
 
+  // 🔹 Mostrar banner si no se aceptaron cookies antes
+  useEffect(() => {
+    const accepted = localStorage.getItem("cookiesAccepted");
+    if (!accepted) setShowCookieBanner(true);
+  }, []);
+
+  // 🔹 Aceptar cookies
+  function handleAcceptCookies() {
+    localStorage.setItem("cookiesAccepted", "true");
+    setShowCookieBanner(false);
+  }
+
   return (
     <main className="pt-5 -mt-20">
       {/* HERO */}
+
+      {/* 🔹 Banner de cookies */}
+      {showCookieBanner && (
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 w-[90%] max-w-[900px] bg-emerald-600 text-white shadow-lg rounded-xl p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 z-[1000]">
+          <p className="text-center md:text-left text-sm md:text-base leading-snug">
+            Esta página web únicamente utiliza cookies propias con finalidad técnica.
+            No recaba ni cede datos personales de los usuarios sin su conocimiento.
+          </p>
+          <button
+            onClick={handleAcceptCookies}
+            className="bg-white text-emerald-600 font-semibold px-6 py-2 rounded-md hover:bg-emerald-700 hover:text-white transition-all duration-200"
+          >
+            Aceptar
+          </button>
+        </div>
+      )}
       <section
         style={{
           backgroundImage: 'url("/fondo.jpg")',
@@ -114,7 +143,7 @@ export default function Home() {
                 <button
                   key={t.id}
                   onClick={() => handleSelectDevice(t)}
-                  className="flex items-center justify-center p-6 rounded-xl border text-center font-medium transition-all duration-200
+                  className="w-full h-40 flex flex-col justify-center items-center flex items-center justify-center p-6 rounded-xl border text-center font-medium transition-all duration-200
                              bg-white text-emerald-600 border-gray-300 hover:bg-emerald-50
                              hover:scale-105 active:scale-95 hover:shadow-lg w-full"
                 >
@@ -124,6 +153,7 @@ export default function Home() {
                     width={80}
                     height={80}
                   />
+                  <p className="mt-3 text-emerald-600 text-sm font-medium">{t.name}</p>
                 </button>
               ))
             )}

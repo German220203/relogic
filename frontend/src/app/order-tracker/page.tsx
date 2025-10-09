@@ -1,112 +1,184 @@
-'use client';
+'use client'
 
 import api from "@/lib/api";
 import { useState } from "react";
+import { CheckCircle, Package, Wrench, Truck, Home, Clock, XCircle } from "lucide-react";
 
 export default function OrderTracker() {
+  const [uuid, setUuid] = useState("");
+  const [orderStatus, setOrderStatus] = useState<string | null>(null);
+  const [reparations, setReparations] = useState<any[]>([]);
+  const [deliveryInfo, setDeliveryInfo] = useState<any | null>(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    const [uuid, setUuid] = useState("");
-    const [orderStatus, setOrderStatus] = useState(null);
-    const [reparations, setReparations] = useState([]);
-    const [deliveryInfo, setDeliveryInfo] = useState(null);
-    const [error, setError] = useState("");
+  const steps = [
+    { id: "PENDING", label: "Pendiente", icon: Clock },
+    { id: "COLLECTING", label: "Recogida", icon: Package },
+    { id: "BEING_REPAIRED", label: "Reparando", icon: Wrench },
+    { id: "DELIVERING", label: "En entrega", icon: Truck },
+    { id: "COMPLETED", label: "Completado", icon: CheckCircle },
+  ];
 
-    function statusTranslation(status: string): string {
+  function statusTranslation(status: string): string {
     switch (status) {
-      case 'PENDING':
-        return 'Pendiente';
-      case 'COLLECTING':
-        return 'En proceso de recogida';
-      case 'BEING_REPAIRED':
-        return 'En reparación';
-      case 'DELIVERING':
-        return 'En entrega';
-      case 'COMPLETED':
-        return 'Completado';
-      case 'CANCELED':
-        return 'Cancelado';
-      default:
-        return status;
+      case "PENDING": return "Pendiente";
+      case "COLLECTING": return "En proceso de recogida";
+      case "BEING_REPAIRED": return "En reparación";
+      case "DELIVERING": return "En entrega";
+      case "COMPLETED": return "Completado";
+      case "CANCELLED": return "Cancelado";
+      default: return status;
     }
   }
 
-    const trackOrder = async () => {
-        try {
-            const response = await api.get("/api/v1/orders/track/" + uuid);
-            setOrderStatus(response.data.status);
-            setReparations(response.data.reparations);
-            setDeliveryInfo(response.data.deliveryInfo);
-            console.log(response.data);
-        } catch (err) {
-            setError("Error rastreando el pedido. Por favor, verifica el código de seguimiento.");
-        }
-    };
+  const trackOrder = async () => {
+    if (!uuid.trim()) {
+      setError("Introduce un código de seguimiento válido.");
+      return;
+    }
+    setError("");
+    setLoading(true);
 
-    return (
-        <div className="order-tracker">
-            <h1 className="text-center text-xl mb-4">Rastreador de pedidos</h1>
+    try {
+      const response = await api.get(`/api/v1/orders/track/${uuid}`);
+      setOrderStatus(response.data.status);
+      setReparations(response.data.reparations || []);
+      setDeliveryInfo(response.data.deliveryInfo || null);
+    } catch {
+      setError("Error rastreando el pedido. Por favor, verifica el código de seguimiento.");
+      setOrderStatus(null);
+      setReparations([]);
+      setDeliveryInfo(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Determina el paso actual
+  const currentStepIndex = steps.findIndex(s => s.id === orderStatus);
+
+  return (
+    <div className="flex flex-col items-center w-full px-4 py-5">
+      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-md p-6">
+        <h1 className="text-2xl font-semibold text-center text-emerald-700 mb-8">
+          Rastreador de pedidos
+        </h1>
+
+        {/* GRID RESPONSIVA */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          {/* Columna izquierda: búsqueda */}
+          <div className="flex flex-col items-center md:items-start">
             <input
-                type="text"
-                placeholder="Introduce el código de seguimiento"
-                value={uuid}
-                onChange={(e) => setUuid(e.target.value)}
-                className="border p-2 rounded w-full max-w-md mb-4"
+              type="text"
+              placeholder="Introduce el código de seguimiento"
+              value={uuid}
+              onChange={(e) => setUuid(e.target.value)}
+              className="border border-gray-300 rounded-xl px-4 py-3 w-full max-w-md mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
             <button
-                onClick={trackOrder}
-                className="bg-blue-500 text-white px-4 py-2 rounded transition-colors duration-300 hover:bg-white hover:text-blue-500 border border-blue-500"
+              onClick={trackOrder}
+              disabled={loading}
+              className={`px-6 py-3 rounded-xl border transition-all duration-200 font-medium
+                ${loading
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-emerald-600 text-white hover:bg-white hover:text-emerald-600 border-emerald-600 hover:shadow-lg'}
+              `}
             >
-                Rastrear pedido
+              {loading ? "Buscando..." : "Rastrear pedido"}
             </button>
 
-            {error && <p className="text-red-500 mt-4">{error}</p>}
+            {error && <p className="text-red-500 mt-4 text-center md:text-left">{error}</p>}
+          </div>
 
+          {/* Columna derecha: resultados */}
+          <div className="space-y-6">
             {orderStatus && (
-                <div className="mt-6">
-                    <h2 className="text-lg font-semibold">Detalles del pedido</h2>
-                    <p>Estado del pedido: {statusTranslation(orderStatus)}</p>
-                    <h1 className="text-lg font-semibold">Reparaciones</h1>
-                    {reparations.length > 0 && (
-                        <div className="mt-2">
-                            <ul className="mt-2">
-                                {reparations.map((repair, index) => (
-                                    <li key={index} className="mb-2">
-                                        {repair.repairTypeName} - {repair.price} €
-                                    </li>
-                                ))}
-                            </ul>
-                            <p className="mt-2">Total: {reparations.reduce((total, repair) => total + repair.price, 0).toFixed(2)} €</p>
-                        </div>
-                    )}
-                </div>
+              <>
+                {/* PROGRESO */}
+                {orderStatus !== "CANCELLED" ? (
+                  <div className="flex flex-col items-center">
+                    <div className="flex items-center justify-between w-full relative max-w-md">
+                      {steps.map((step, index) => {
+                        const Icon = step.icon;
+                        const isActive = index <= currentStepIndex;
+                        const isCompleted = index < currentStepIndex;
+
+                        return (
+                          <div key={step.id} className="flex flex-col items-center z-10">
+                            <div
+                              className={`w-10 h-10 flex items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                                isActive
+                                  ? "bg-emerald-600 border-emerald-600 text-white"
+                                  : "border-gray-300 text-gray-400 bg-white"
+                              }`}
+                            >
+                              <Icon className="w-5 h-5" />
+                            </div>
+                            <p
+                              className={`text-xs mt-2 ${
+                                isActive ? "text-emerald-700 font-semibold" : "text-gray-500"
+                              }`}
+                            >
+                              {step.label}
+                            </p>
+                          </div>
+                        );
+                      })}
+                      {/* Línea de conexión */}
+                      <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-10" />
+                      <div
+                        className="absolute top-5 left-0 h-0.5 bg-emerald-600 -z-10 transition-all duration-500"
+                        style={{
+                          width: `${((currentStepIndex + 1) / steps.length) * 100}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3 text-red-600">
+                    <XCircle className="w-6 h-6" />
+                    <p className="font-medium">Pedido cancelado</p>
+                  </div>
+                )}
+
+                {/* Detalles del pedido
+                <div className="p-4 rounded-xl border border-gray-200 shadow-sm">
+                  <h2 className="text-lg font-semibold text-emerald-700 mb-2">Detalles del pedido</h2>
+                  <p className="text-gray-700">
+                    <span className="font-medium">Estado:</span> {statusTranslation(orderStatus)}
+                  </p>
+                </div> */}
+              </>
+            )}
+
+            {reparations.length > 0 && (
+              <div className="p-4 rounded-xl border border-gray-200 shadow-sm">
+                <h2 className="text-lg font-semibold text-emerald-700 mb-2">Reparaciones</h2>
+                <ul className="list-disc list-inside text-gray-700">
+                  {reparations.map((repair, i) => (
+                    <li key={i}>
+                      {repair.repairTypeName} – {repair.price} €
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-2 font-semibold text-gray-800">
+                  Total: {reparations.reduce((t, r) => t + r.price, 0).toFixed(2)} €
+                </p>
+              </div>
             )}
 
             {deliveryInfo && (
-                <div className="mt-6">
-                    <h2 className="text-lg font-semibold">Información de entrega</h2>
-                    <p>Dirección: {deliveryInfo.address}</p>
-                    <p>Código postal: {deliveryInfo.postalCode}</p>
-                    {/* <p>Fecha estimada de entrega: {new Date(deliveryInfo.estimatedDate).toLocaleDateString()}</p> */}
-                </div>
+              <div className="p-4 rounded-xl border border-gray-200 shadow-sm">
+                <h2 className="text-lg font-semibold text-emerald-700 mb-2">Información de entrega</h2>
+                <p className="text-gray-700">Dirección: {deliveryInfo.address}</p>
+                <p className="text-gray-700">Código postal: {deliveryInfo.postalCode}</p>
+              </div>
             )}
-
-
-            {/* {orderStatus && (
-                <div className="mt-6">
-                    <h2 className="text-lg font-semibold">Estado del pedido: {orderStatus}</h2>
-                    {reparations.length > 0 && (
-                        <ul className="mt-2">
-                            {reparations.map((repair, index) => (
-                                <li key={index} className="mb-2">
-                                    Reparación: {repair.description} - Fecha: {new Date(repair.date).toLocaleDateString()}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            )} */}
+          </div>
         </div>
-
-    )
-
+      </div>
+    </div>
+  );
 }

@@ -57,4 +57,80 @@ body {
   background-color: #f3f4f6; /* gray-100 */
 }
 
+/* Cookie banner styles */
+.banner {
+    position: fixed;
+    bottom: 1rem; /* separación del borde inferior */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 900px;
+
+    background-color: #059669; /* emerald-600 */
+    color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 0.75rem; /* esquinas redondeadas */
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+
+    z-index: 1000;
+    font-family: system-ui, sans-serif;
+}
+
+.banner p {
+    margin: 0;
+    text-align: center;
+    line-height: 1.4;
+    font-size: 1rem;
+    flex: 1;
+}
+
+.banner button {
+    border: none;
+    background-color: white;
+    color: #059669;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner button:hover {
+    background-color: #047857; /* emerald-700 */
+    color: white;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 850px) {
+    .banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .banner button {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+}
+
+@media (max-width: 650px) {
+    .banner p {
+        font-size: 0.9rem;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+}
+
+
 
