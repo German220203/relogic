@@ -13,6 +13,7 @@ import es.relogic.relogic.brand.BrandRepository;
 import es.relogic.relogic.device.DeviceType;
 import es.relogic.relogic.device.DeviceTypeRepository;
 import es.relogic.relogic.model.request.ModelCreateRequest;
+import es.relogic.relogic.model.request.ModelUpdateRequest;
 import es.relogic.relogic.model.response.ModelPageResponse;
 import es.relogic.relogic.model.response.ModelResponse;
 import lombok.RequiredArgsConstructor;
@@ -67,9 +68,9 @@ public class ModelService {
 
         Model savedModel = new Model();
         savedModel.setName(model.getName());
-        Brand brand = brandRepository.findById(model.getBrand()).orElse(null);
+        Brand brand = brandRepository.findById(model.getBrandId()).orElse(null);
         savedModel.setBrand(brand);
-        DeviceType deviceType = deviceTypeRepository.findById(model.getDeviceType()).orElse(null);
+        DeviceType deviceType = deviceTypeRepository.findById(model.getDeviceTypeId()).orElse(null);
         savedModel.setDeviceType(deviceType);
         savedModel.setActive(true);
         savedModel.setRepairs(List.of());
@@ -78,14 +79,15 @@ public class ModelService {
     }
 
     @Transactional
-    public ModelResponse updateModel(Integer id, Model model) {
-        if (model.getId() != null || id != null || id != model.getId()) {
+    public ModelResponse updateModel(Integer id, ModelUpdateRequest modelRequest) {
+        if (modelRequest.getId() != null || id != null || id != modelRequest.getId()) {
             Optional<Model> existingModel = modelRepository.findById(id);
             if (existingModel.isPresent()) {
-                existingModel.get().setName(model.getName());
-                existingModel.get().setBrand(model.getBrand());
-                existingModel.get().setDeviceType(model.getDeviceType());
-                existingModel.get().setRepairs(model.getRepairs());
+                existingModel.get().setName(modelRequest.getName());
+                Brand brand = brandRepository.findById(modelRequest.getBrandId()).orElse(null);
+                existingModel.get().setBrand(brand);
+                DeviceType deviceType = deviceTypeRepository.findById(modelRequest.getDeviceTypeId()).orElse(null);
+                existingModel.get().setDeviceType(deviceType);
                 modelRepository.save(existingModel.get());
                 return new ModelResponse(true, existingModel.get(), "Modelo actualizado exitosamente");
             }
@@ -129,8 +131,8 @@ public class ModelService {
         modelRepository.deleteById(id);
     }
 
-    public List<Model> getModelsByBrandId(Integer brandId) {
-        return modelRepository.findAllActiveByBrandId(brandId);
+    public List<ModelDTO> getModelsByBrandId(Integer brandId) {
+        return modelRepository.findAllActiveByBrandId(brandId).stream().map(model -> new ModelDTO(model)).toList();
     }
 
     public List<Model> getModelsByDeviceTypeId(Integer deviceTypeId) {

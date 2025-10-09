@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.relogic.relogic.model.request.ModelCreateRequest;
+import es.relogic.relogic.model.request.ModelUpdateRequest;
 import es.relogic.relogic.model.response.ModelPageResponse;
 import es.relogic.relogic.model.response.ModelResponse;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class ModelRestController {
     }
 
     @GetMapping("/by-brand/{brandId}")
-    public List<Model> getModelsByBrand(@PathVariable Integer brandId) {
+    public List<ModelDTO> getModelsByBrand(@PathVariable Integer brandId) {
         return modelService.getModelsByBrandId(brandId);
     }
 
@@ -73,8 +74,8 @@ public class ModelRestController {
 
     // Endpoint para actualizar un modelo existente
     @PutMapping("/{id}")
-    public ResponseEntity<ModelResponse> updateModel(@PathVariable Integer id, @RequestBody Model model) {
-        ModelResponse response = modelService.updateModel(id, model);
+    public ResponseEntity<ModelResponse> updateModel(@PathVariable Integer id, @RequestBody ModelUpdateRequest modelRequest) {
+        ModelResponse response = modelService.updateModel(id, modelRequest);
 
         if (response.getStatus().equals(false)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(response);

@@ -60,7 +60,7 @@ public class OrderService {
         }
         Order order = new Order();
         order.setRepairs(Set.copyOf(orderRequest.getRepairsIds().stream()
-                .map(repairService::getRepairById)
+                .map(repairService::findById)
                 .toList()));
         // order.setUser(userOpt.orElse(null));
         OrderStatus status = orderStatusService.getOrderStatusByName("PENDING");
@@ -94,7 +94,7 @@ public class OrderService {
 
     private Boolean isPriceValid(CreateOrderRequest order) {
         Double expectedPrice = order.getRepairsIds().stream()
-                .map(repairService::getRepairById)
+                .map(repairService::findById)
                 .map(Repair::getPrice)
                 .reduce(0.0, Double::sum);
         return expectedPrice.equals(Double.valueOf(order.getTotalPrice()));

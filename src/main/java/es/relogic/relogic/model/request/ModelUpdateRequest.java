@@ -9,8 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModelCreateRequest {
+public class ModelUpdateRequest {
+    private Integer id;
     private String name;
     private Integer brandId;
     private Long deviceTypeId;
+    
 }
