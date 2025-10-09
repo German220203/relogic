@@ -20,6 +20,7 @@ public class DeviceTypeService {
 
     private final DeviceTypeRepository deviceTypeRepository;
 
+    @Transactional
     public DeviceTypeResponse createDeviceType(DeviceType deviceType) {
         if (deviceType.getName() != null) {
             Optional<DeviceType> existingDeviceType = deviceTypeRepository.findByName(deviceType.getName());
@@ -125,7 +126,6 @@ public class DeviceTypeService {
     }
 
     public DeviceTypeDTO findById(Integer id) {
-        // TODO Auto-generated method stub
         return deviceTypeRepository.findById(Long.valueOf(id)).map(DeviceTypeDTO::new).get();
     }
 

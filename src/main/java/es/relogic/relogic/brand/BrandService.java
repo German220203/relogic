@@ -14,16 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import es.relogic.relogic.brand.response.BrandResponse;
 import es.relogic.relogic.brand.response.BrandPageResponse;
 import es.relogic.relogic.model.Model;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class BrandService {
 
     private final BrandRepository brandRepository;
-
-    @Autowired
-    public BrandService(BrandRepository brandRepository) {
-        this.brandRepository = brandRepository;
-    }
 
     @Transactional(readOnly = true)
     public List<BrandDTO> findAll() {

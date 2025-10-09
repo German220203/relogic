@@ -63,7 +63,7 @@ public class DeviceTypeRestController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // Endpoint para obtener todos los tipos de dispositivos (ADMIN)
