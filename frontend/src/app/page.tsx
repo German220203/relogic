@@ -5,6 +5,7 @@ import api from "@/lib/api";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const router = useRouter();
@@ -53,30 +54,46 @@ export default function Home() {
         </div>
       )}
       <section
-        style={{
-          backgroundImage: 'url("/fondo.jpg")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-        className="relative w-full text-white min-h-[70vh] flex items-center justify-start px-8 rounded-2xl overflow-hidden"
+        className="relative w-full text-white h-[70vh] flex items-stretch justify-start px-8 rounded-2xl overflow-hidden mt-30 sm:mt-0"
       >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/40 z-0 rounded-2xl"></div>
+        {/* 🎥 Video de fondo */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover rounded-2xl brightness-[0.8] contrast-[1.1]"
+        >
+          <source src="/intro_relogic.mp4" type="video/mp4" />
+        </video>
 
-        <div className="relative z-10 w-full max-w-4xl ml-0">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg text-left">
-            Todo en un solo servicio
+        {/* 💚 Overlay verde */}
+        <div className="absolute inset-0 bg-emerald-600/10 mix-blend-multiply z-0 rounded-2xl"></div>
+
+        {/* 🟩 Degradado */}
+        <div className="absolute inset-0 bg-gradient-to-t from-emerald-700/50 via-emerald-700/10 to-emerald-700/0 z-0 rounded-2xl"></div>
+
+        {/* 🖤 Capa oscura */}
+        {/* <div className="absolute inset-0 bg-black/1 z-0 rounded-2xl"></div> */}
+
+        {/* 🧭 Contenedor de texto */}
+        <div className="relative z-10 w-full max-w-4xl flex flex-col justify-between items-start text-left h-full py-12">
+          
+          {/* TÍTULO ARRIBA */}
+          <h1
+            className="text-xl sm:text-2xl md:text-3xl font-semibold leading-relaxed max-w-xl drop-shadow-md"
+            style={{ textWrap: "balance" }}
+          >
+            Somos especialistas en{" "}
+            <span className="text-emerald-300 font-bold">reparación</span> y{" "}
+            <span className="text-emerald-300 font-bold">reacondicionamiento</span> de equipos,
+            comprometidos a{" "}
+            <span className="text-emerald-300 font-bold">reutilizar</span> y{" "}
+            <span className="text-emerald-300 font-bold">reciclar</span>.
           </h1>
-          <p className="text-base sm:text-lg md:text-xl mb-6 drop-shadow text-left">
-            ¿Necesitas un técnico para reparar tu móvil? <br />
-            <br />
-            En Relogic, ofrecemos servicios de reparación para móviles, tablets y ordenadores. <br />
-            <br />
-            ¡Rápido, fiable y al mejor precio!
-          </p>
 
-          <div className="flex flex-wrap gap-4">
+          {/* BOTONES ABAJO */}
+          <div className="flex flex-wrap gap-4 pb-10">
             <Link
               href="/reparation"
               className="group relative inline-flex items-center overflow-hidden rounded-sm bg-white px-8 py-3 text-white focus:ring-3 focus:outline-hidden"
@@ -85,12 +102,16 @@ export default function Home() {
                 <svg
                   className="size-5 text-emerald-600 bg-white rtl:rotate-180"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </span>
-              <span className="text-sm text-emerald-600 font-semibold font-medium transition-all group-hover:me-4">Reparación</span>
+              <span className="text-sm text-emerald-600 font-semibold font-medium transition-all group-hover:me-4">
+                Reparación
+              </span>
             </Link>
 
             <Link
@@ -101,32 +122,42 @@ export default function Home() {
                 <svg
                   className="size-5 text-emerald-600 bg-white rtl:rotate-180"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </span>
-              <span className="text-sm text-emerald-600 font-semibold font-medium transition-all group-hover:me-4">Seguimiento</span>
+              <span className="text-sm text-emerald-600 font-semibold font-medium transition-all group-hover:me-4">
+                Seguimiento
+              </span>
             </Link>
 
             <Link
-              href="/reparation"
+              href="/contact"
               className="group relative inline-flex items-center overflow-hidden rounded-sm bg-white px-8 py-3 text-white focus:ring-3 focus:outline-hidden"
             >
               <span className="absolute -end-full transition-all group-hover:end-4">
                 <svg
                   className="size-5 text-emerald-600 bg-white rtl:rotate-180"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </span>
-              <span className="text-sm text-emerald-600 font-semibold font-medium transition-all group-hover:me-4">Contáctanos</span>
+              <span className="text-sm text-emerald-600 font-semibold font-medium transition-all group-hover:me-4">
+                Contáctanos
+              </span>
             </Link>
           </div>
         </div>
       </section>
+
+
 
       {/* SERVICIOS */}
       <section className="relative py-16 flex flex-col justify-center items-center text-center px-6">
@@ -148,7 +179,7 @@ export default function Home() {
                              hover:scale-105 active:scale-95 hover:shadow-lg w-full"
                 >
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}${t.image}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL?.replace("/api","")}${t.image}`}
                     alt={t.name}
                     width={80}
                     height={80}
@@ -160,6 +191,23 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <section className="bg-cta"
+        style={
+          {backgroundColor: "#d8fbeb"}
+        }>
+        <div className="container text-center">
+          <h2 className="text-4xl mb-6">Comprometidos con el medio ambiente</h2>
+          <p className="title-desc mt-3">
+            Nuestras acciones tienen un impacto en nuestro entorno, y es por ello que nuestra empresa
+            lleva tiempo comprometida con una estrategia medioambiental sostenible.
+          </p>
+          <div className="mt-10">
+            <a href="/reparation" className="btn btn-primary mt-2">Empezar</a>
+          </div>
+        </div>
+      </section>
+
 
       {/* TESTIMONIOS */}
       <section className="py-16 text-center px-6 bg-gray-50">

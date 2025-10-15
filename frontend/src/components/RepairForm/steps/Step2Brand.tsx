@@ -9,7 +9,9 @@ import "../../../styles/brands.css"
 type Props = { nextStep: () => void; prevStep: () => void; formData: any; updateForm: Function }
 
 export default function Step2Brand({ nextStep, prevStep, formData, updateForm }: Props) {
-  const [brands, setBrands] = useState<{ id: string; name: string }[]>([])
+  const [brands, setBrands] = useState<{
+    image: any; id: string; name: string 
+}[]>([])
   const [loading, setLoading] = useState(false)
   const [hasFetched, setHasFetched] = useState(false); // bandera
 
@@ -66,10 +68,12 @@ export default function Step2Brand({ nextStep, prevStep, formData, updateForm }:
         `}
       >
         <Image
-          src={`${process.env.NEXT_PUBLIC_API_URL}${b.image}`}
+          src={`${process.env.NEXT_PUBLIC_API_URL?.replace("/api","")}${b.image}`}
           alt={b.name}
           width={70}
           height={70}
+          unoptimized={true}
+          priority={true}
           className="object-contain"
         />
         <p className="mt-3 text-emerald-600 text-sm font-medium">{b.name}</p>

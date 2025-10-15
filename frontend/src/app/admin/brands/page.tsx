@@ -25,6 +25,21 @@ class ModelDTO {
     updatedAt!: string;
 }
 
+class DeviceType {
+    id!: number;
+    name!: string;
+    models!: ModelDTO[];
+    createdAt!: string;
+    updatedAt!: string;
+    active!: boolean;
+}
+
+type ModelResponse = {
+  status: boolean;
+  model: ModelDTO | null;
+  message: string;
+};
+
 export default function AdminBrands() {
     const [brands, setBrands] = useState<Brand[]>([]);
     const [page, setPage] = useState(0);
@@ -104,13 +119,12 @@ export default function AdminBrands() {
             return;
         }
         try {
-            let res;
-            res = await api.post(
+            const res = await api.post<ModelResponse>(
                 "/api/v1/models",
                 {
-                name: modelName,
-                brand: selectedBrand.id,
-                deviceType: selectedDeviceType
+                    name: modelName,
+                    brandId: selectedBrand.id,
+                    deviceTypeId: selectedDeviceType
                 },
                 { withCredentials: true }
             );

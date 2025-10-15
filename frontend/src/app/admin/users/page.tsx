@@ -279,7 +279,7 @@ export default function AdminUsers() {
             </div>
             <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                 <h2 className="text-xl font-bold mb-4">
-                    Pedidos de {selectedUser?.firstName} {selectedUser?.lastName1}
+                    Pedidos de {selectedUser?.firstName} {selectedUser?.lastName}
                 </h2>
 
                 {userOrders.length === 0 ? (

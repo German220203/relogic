@@ -58,7 +58,7 @@ export default function Navbar() {
       <div className="flex items-center gap-4">
         <Link href="/">
           <Image
-            src="/logo-bi-color.png"
+            src="/logo_relogic_p.png"
             alt="Logo Relogic"
             width={120}
             height={120}

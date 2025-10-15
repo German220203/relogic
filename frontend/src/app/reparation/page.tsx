@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import { useEffect, useState } from 'react'
+export const dynamic = 'force-dynamic';
+
+import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { AnimatePresence, motion } from "framer-motion";
 import Step3Model from '@/components/RepairForm/steps/Step3Model'
@@ -35,7 +36,7 @@ const variants = {
   }),
 };
 
-export default function ReparationPage() {
+function ReparationContent() {
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState(1);
   const searchParams = useSearchParams()
@@ -118,8 +119,6 @@ export default function ReparationPage() {
 
   return (
     <main className="grid grid-cols-1 md:grid-cols-3 w-full max-w-6xl mx-auto gap-4 px-4">
-      
-      {/* Sidebar solo en desktop */}
       <div className="hidden md:block">
         <Steps
           step={step}
@@ -133,7 +132,6 @@ export default function ReparationPage() {
         />
       </div>
 
-      {/* Contenido principal */}
       <div className="col-span-1 md:col-span-2 relative flex flex-col justify-center min-h-[400px] md:min-h-[500px]">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
@@ -147,7 +145,7 @@ export default function ReparationPage() {
             className="w-full overflow-y-auto overflow-x-hidden pr-1 md:pr-2 pb-2 [scrollbar-gutter:stable]"
           >
             {step === 1 && (
-              <Step1DeviceType nextStep={nextStep} prevStep={prevStep} formData={formData} updateForm={updateForm} />
+              <Step1DeviceType nextStep={nextStep} formData={formData} updateForm={updateForm} />
             )}
             {step === 2 && (
               <Step2Brand nextStep={nextStep} prevStep={prevStep} formData={formData} updateForm={updateForm} />
@@ -175,4 +173,12 @@ export default function ReparationPage() {
       </div>
     </main>
   );
+}
+
+export default function ReparationPage() {
+  return (
+    <Suspense fallback={<div className="text-center py-10">Cargando...</div>}>
+      <ReparationContent />
+    </Suspense>
+  )
 }

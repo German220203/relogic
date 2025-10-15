@@ -1,15 +1,5 @@
 'use client';
 
-class Repair {
-    id!: number;
-    price!: number;
-    repairTypeName!: string;
-    model!: ModelDTO;
-    createdAt!: string;
-    updatedAt!: string;
-    active!: boolean;
-}
-
 import RepairForm from "../RepairForm";
 
 export default function CreateRepairPage() {

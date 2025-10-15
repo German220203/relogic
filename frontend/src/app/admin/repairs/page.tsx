@@ -107,7 +107,7 @@ export default function AdminRepairs() {
 
     // 👇 aplicar filtro de búsqueda + filtro de estado
     const filteredRepairs = repairs.filter((repair) => {
-        const matchesSearch = repair.id?.toString().includes(searchTerm.toLowerCase()) || repair.repairTypeName.toLowerCase().includes(searchTerm.toLowerCase()) || repair.modelId?.toString().includes(searchTerm) || repair.price?.toString().includes(searchTerm);
+        const matchesSearch = repair.id?.toString().includes(searchTerm.toLowerCase()) || repair.repairTypeName.toLowerCase().includes(searchTerm.toLowerCase()) || repair.price?.toString().includes(searchTerm);
         const matchesStatus =
             statusFilter === 'all' ||
             (statusFilter === 'active' && repair.active) ||

@@ -40,8 +40,14 @@ export default function Steps({
           if (Array.isArray(formData[s.key])) {
             const arr = formData[s.key]
             if (arr.length > 0) {
-              if (typeof arr[0] === 'object' && s.nestedKey && s.nestedKey in arr[0]) {
-                subtitle = arr.map((item: any) => item[s.nestedKey]).join(', ')
+              if (
+                typeof arr[0] === 'object' &&
+                typeof s.nestedKey === 'string' &&
+                s.nestedKey in arr[0]
+              ) {
+                subtitle = typeof s.nestedKey === 'string'
+                  ? arr.map((item: any) => item[s.nestedKey as string]).join(', ')
+                  : '\u00A0'
               } else {
                 subtitle = arr.join(', ')
               }

@@ -42,7 +42,7 @@ INSERT INTO brands (id, name, image, active) VALUES (9, 'Nokia', '/images/brands
 INSERT INTO brands (id, name, image, active) VALUES (10, 'OnePlus', '/images/brands/oneplus.svg', true);
 INSERT INTO brands (id, name, image, active) VALUES (11, 'Oppo', '/images/brands/Oppo.svg', true);
 INSERT INTO brands (id, name, image, active) VALUES (12, 'Sony', '/images/brands/sony.svg', true);
-INSERT INTO brands (id, name, image, active) VALUES (13, 'Xiaomi', '/images/brands/nokia.svg', true);
+INSERT INTO brands (id, name, image, active) VALUES (13, 'Xiaomi', '/images/brands/xiaomi.svg', true);
 INSERT INTO brands (id, name, image, active) VALUES (14, 'ZTE', '/images/brands/zte.png', true);
 
 -- ======= DEVICE TYPES =======

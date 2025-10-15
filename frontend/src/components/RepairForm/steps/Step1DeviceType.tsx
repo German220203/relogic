@@ -8,7 +8,9 @@ import Image from 'next/image';
 type Props = { nextStep: Function; formData: any; updateForm: Function }
 
 export default function Step1DeviceType({ nextStep, formData, updateForm }: Props) {
-  const [types, setTypes] = useState<{ id: string; name: string }[]>([])
+  const [types, setTypes] = useState<{
+    image: any; id: string; name: string 
+}[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -61,7 +63,7 @@ export default function Step1DeviceType({ nextStep, formData, updateForm }: Prop
             `}
           >
             <Image
-              src={`${process.env.NEXT_PUBLIC_API_URL}${t.image}`}
+              src={`${process.env.NEXT_PUBLIC_API_URL?.replace("/api","")}${t.image}`}
               alt={t.name}
               width={70}
               height={70}

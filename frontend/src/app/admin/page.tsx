@@ -19,7 +19,17 @@ export default function AdminPage() {
                 console.log("User is admin:", response.data.isAdmin);
             } catch (error) {
                 console.error("Error fetching user data:", error);
-                if (error.response.data === "No autenticado" && error.response.status === 401) {
+                if (
+                    typeof error === "object" &&
+                    error !== null &&
+                    "response" in error &&
+                    typeof (error as any).response === "object" &&
+                    (error as any).response !== null &&
+                    "data" in (error as any).response &&
+                    "status" in (error as any).response &&
+                    (error as any).response.data === "No autenticado" &&
+                    (error as any).response.status === 401
+                ) {
                     window.location.href = "/login";
                 }
             }

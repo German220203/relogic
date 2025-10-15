@@ -3,6 +3,7 @@
 import api from "@/lib/api";
 import { useEffect, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type BrandFormProps = {
   mode: "create" | "edit";
@@ -29,8 +30,9 @@ export default function BrandForm({ mode, brandId }: BrandFormProps) {
   const [loading, setLoading] = useState(mode === "edit");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
-  // 🔹 Verificar usuario
+  // Verificar usuario
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -43,7 +45,7 @@ export default function BrandForm({ mode, brandId }: BrandFormProps) {
     fetchUser();
   }, []);
 
-  // 🔹 Cargar marca si estamos en modo edición
+  // Cargar marca en modo edición
   useEffect(() => {
     if (mode === "edit" && brandId) {
       async function fetchBrand() {
@@ -62,56 +64,89 @@ export default function BrandForm({ mode, brandId }: BrandFormProps) {
     }
   }, [mode, brandId]);
 
-  // 🔹 Guardar cambios o crear
+  // Subida de imagen a carpeta "brands"
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  if (!e.target.files?.[0]) return;
+  
+  const file = e.target.files[0];
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("folder", "brands");
+
+  setUploading(true);
+  setErrorMessage(null);
+
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/v1/files/upload`, {
+      method: "POST",
+      body: formData,
+      credentials: "include", // reemplaza withCredentials: true
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Error subiendo la imagen");
+    }
+
+    const fileUrl = await res.text();
+    setImage(fileUrl); // ruta devuelta por backend
+  } catch (err: any) {
+    console.error("Error subiendo la imagen:", err);
+    setErrorMessage(err.message);
+  } finally {
+    setUploading(false);
+  }
+};
+
+  // Guardar cambios o crear
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
     setSuccessMessage(null);
 
+    if (!image) {
+      setErrorMessage("Debes subir una imagen");
+      return;
+    }
+
     try {
-        let res;
-        if (mode === "create") {
-        res = await api.post<BrandResponse>("/api/v1/brands", { name, image }, { withCredentials: true });
-        } else if (mode === "edit" && brandId) {
-        res = await api.put<BrandResponse>(`/api/v1/brands/${brandId}`, { name, image }, { withCredentials: true });
-        }
+      let res;
+      if (mode === "create") {
+        res = await api.post<BrandResponse>(
+          "/api/v1/brands",
+          { name, image },
+          { withCredentials: true }
+        );
+      } else if (mode === "edit" && brandId) {
+        res = await api.put<BrandResponse>(
+          `/api/v1/brands/${brandId}`,
+          { name, image },
+          { withCredentials: true }
+        );
+      }
 
-        // Si llegamos aquí, status < 400
-        if (res?.data.status) {
+      if (res?.data.status) {
         setSuccessMessage(res.data.message || "Guardado exitosamente");
-        setErrorMessage(null);
-        // Redirigir después de 1.5s
         setTimeout(() => router.push("/admin/brands"), 1500);
-        } else {
-        // Aunque el status HTTP sea 200, backend indica fallo
+      } else {
         setErrorMessage(res?.data.message || "Hubo un error al guardar");
-        }
-
+      }
     } catch (error: any) {
-        // Manejo de errores HTTP >= 400 (ej. 409, 401, 500)
-        const message = error.response?.data?.message || "Error inesperado al guardar la marca";
-        setErrorMessage(message);
-        setSuccessMessage(null);
-        console.error("Error guardando la marca:", error);
+      const message = error.response?.data?.message || "Error inesperado al guardar la marca";
+      setErrorMessage(message);
+      console.error("Error guardando la marca:", error);
     }
   };
 
-  if (!isAdmin) {
-    return <div>No tienes permisos para acceder a esta página.</div>;
-  }
-
-  if (loading) {
-    return <div>Cargando datos de la marca...</div>;
-  }
+  if (!isAdmin) return <div>No tienes permisos para acceder a esta página.</div>;
+  if (loading) return <div>Cargando datos de la marca...</div>;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
-      {errorMessage && (
-        <div className="text-red-600 font-semibold">{errorMessage}</div>
-      )}
-      {successMessage && (
-        <div className="text-green-600 font-semibold">{successMessage}</div>
-      )}
+      {errorMessage && <div className="text-red-600 font-semibold">{errorMessage}</div>}
+      {successMessage && <div className="text-green-600 font-semibold">{successMessage}</div>}
 
       <div>
         <label className="font-medium text-gray-700">Nombre *</label>
@@ -127,12 +162,23 @@ export default function BrandForm({ mode, brandId }: BrandFormProps) {
       <div>
         <label className="font-medium text-gray-700">Imagen *</label>
         <input
-          type="text"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
           className="w-full border rounded p-2"
-          required
         />
+        {uploading && <div className="text-blue-600 mt-1">Subiendo imagen...</div>}
+        {image && (
+          <div className="mt-2">
+            <Image
+                                      src={`${process.env.NEXT_PUBLIC_API_URL}${image}`}
+                                      alt={name}
+                                      width={70}
+                                      height={70}
+                                      className="object-contain"
+                                    />
+          </div>
+        )}
       </div>
 
       <button

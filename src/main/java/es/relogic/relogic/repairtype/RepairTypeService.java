@@ -27,7 +27,7 @@ public class RepairTypeService {
                 return new RepairTypeResponse(false, existingRepairType.get(), "El tipo de reparación ya existe");
             }
         }
-
+        repairType.setActive(true); // Por defecto, el nuevo RepairType está activo
         RepairType savedRepairType = repairTypeRepository.save(repairType);
         return new RepairTypeResponse(true, savedRepairType, "Tipo de reparación creado exitosamente");
     }

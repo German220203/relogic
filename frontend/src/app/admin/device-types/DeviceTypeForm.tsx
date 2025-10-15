@@ -3,6 +3,7 @@
 import api from "@/lib/api";
 import { useEffect, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type DeviceTypeFormProps = {
   mode: "create" | "edit";
@@ -29,6 +30,7 @@ export default function DeviceTypeForm({ mode, deviceTypeId }: DeviceTypeFormPro
   const [loading, setLoading] = useState(mode === "edit");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   // 🔹 Verificar usuario
   useEffect(() => {
@@ -42,6 +44,42 @@ export default function DeviceTypeForm({ mode, deviceTypeId }: DeviceTypeFormPro
     }
     fetchUser();
   }, []);
+
+  // Subida de imagen a carpeta "brands"
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  if (!e.target.files?.[0]) return;
+  
+  const file = e.target.files[0];
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("folder", "brands");
+
+  setUploading(true);
+  setErrorMessage(null);
+
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/v1/files/upload`, {
+      method: "POST",
+      body: formData,
+      credentials: "include", // reemplaza withCredentials: true
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Error subiendo la imagen");
+    }
+
+    const fileUrl = await res.text();
+    setImage(fileUrl); // ruta devuelta por backend
+  } catch (err: any) {
+    console.error("Error subiendo la imagen:", err);
+    setErrorMessage(err.message);
+  } finally {
+    setUploading(false);
+  }
+};
 
   // 🔹 Cargar deviceType si estamos en modo edición
   useEffect(() => {
@@ -127,12 +165,23 @@ export default function DeviceTypeForm({ mode, deviceTypeId }: DeviceTypeFormPro
       <div>
         <label className="font-medium text-gray-700">Imagen *</label>
         <input
-          type="text"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
           className="w-full border rounded p-2"
-          required
         />
+        {uploading && <div className="text-blue-600 mt-1">Subiendo imagen...</div>}
+        {image && (
+          <div className="mt-2">
+            <Image
+                          src={`${process.env.NEXT_PUBLIC_API_URL}${image}`}
+                          alt={name}
+                          width={70}
+                          height={70}
+                          className="object-contain"
+                        />
+          </div>
+        )}
       </div>
 
       <button
