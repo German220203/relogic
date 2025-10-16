@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
         hostname: "api.relogic.com", // tu dominio del backend en producción
         pathname: "/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "relogic-backend.onrender.com", // tu dominio del backend en producción
+        pathname: "/images/**",
+      },
     ],
   },
 };
