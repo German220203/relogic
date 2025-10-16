@@ -11,12 +11,12 @@ public class RelogicApplication {
 	public static void main(String[] args) {
 
 		// Cargar las variables del .env
-        Dotenv dotenv = Dotenv.load();
+        // Dotenv dotenv = Dotenv.load();
 
         // Añadirlas al sistema para que Spring Boot las reconozca
-        dotenv.entries().forEach(e ->
-            System.setProperty(e.getKey(), e.getValue())
-        );
+        // dotenv.entries().forEach(e ->
+        //     System.setProperty(e.getKey(), e.getValue())
+        // );
 
 		// Iniciar la aplicación Spring Boot
 		SpringApplication.run(RelogicApplication.class, args);
