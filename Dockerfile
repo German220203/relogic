@@ -20,7 +20,7 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Copiamos el .env si existe
-COPY .env .env
+# COPY .env .env
 
 # Variables de entorno
 ENV SPRING_PROFILES_ACTIVE=${SPRING_PROFILE}
