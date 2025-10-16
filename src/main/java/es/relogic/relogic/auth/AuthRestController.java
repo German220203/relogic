@@ -37,6 +37,7 @@ public class AuthRestController {
         cookie.setSecure(true);   // solo en HTTPS
         cookie.setPath("/");
         cookie.setMaxAge(EXPIRATION);
+        cookie.setAttribute("SameSite", "None"); // para permitir envío en CORS
 
         response.addCookie(cookie);
 
